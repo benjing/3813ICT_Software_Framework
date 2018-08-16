@@ -8,22 +8,21 @@ import {Router} from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  email:string = '';
-  password:string = '';
+  username:string = '';
 
   constructor(private router:Router,private form:FormsModule) { }
 
   ngOnInit() {
+
+    if (typeof(Storage) !== "undefined"){
+      console.log("found")
+    }
   }
 
   loginUser(event){
     event.preventDefault();
-    if (this.email== "ben" && this.password == "123"){
-      alert('You have logged in')
-    }
-    else{
-      alert('Unautherized User!')
-    }
+    localStorage.setItem("username", this.username);
+    this.router.navigateByUrl('/group')
   }
 
 }
