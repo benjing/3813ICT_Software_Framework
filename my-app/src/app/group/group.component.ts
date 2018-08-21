@@ -9,6 +9,8 @@ import {Router} from '@angular/router';
 })
 export class GroupComponent implements OnInit {
 
+  
+
   constructor(private router:Router,private form:FormsModule) { }
 
   ngOnInit() {
