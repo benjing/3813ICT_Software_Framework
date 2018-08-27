@@ -5,3 +5,7 @@
   <button type="submit">Log Out</button>
 </form>
 <h2>Groups:</h2>
+<form (submit)='deleteGroup($event)'>
+    <input [(ngModel)]='group' group_id="id" >
+    <button type="submit">Delete Group</button>
+</form>

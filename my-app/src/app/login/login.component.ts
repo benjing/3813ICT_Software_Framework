@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
+import {MongoService} from '../mongo.service'
+import {FileSystemService} from '../file-system.service'
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,7 @@ import {Router} from '@angular/router';
 export class LoginComponent implements OnInit {
   username:string = '';
 
-  constructor(private router:Router,private form:FormsModule) { }
+  constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService) { }
 
   ngOnInit() {
 
@@ -21,8 +23,19 @@ export class LoginComponent implements OnInit {
 
   loginUser(event){
     event.preventDefault();
-    localStorage.setItem("username", this.username);
-    this.router.navigateByUrl('/group')
+    this.fs.see_users(this.username).subscribe(data =>{
+      console.log(data)
+      var result = data
+      if(result.success == true){
+        localStorage.setItem("roles", result.username[0].roles)
+        localStorage.setItem("username", this.username);
+        this.router.navigateByUrl('/group')
+        return
+      }
+      alert("Unkown User")
+    })
+    // localStorage.setItem("username", this.username);
+    // this.router.navigateByUrl('/group')
   }
 
 }
