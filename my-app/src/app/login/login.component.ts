@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   loginUser(event){
     event.preventDefault();
-    this.fs.see_users(this.username).subscribe(data =>{
+    this.fs.check_user(this.username).subscribe(data =>{
       console.log(data)
       var result = data
       if(result.success == true){

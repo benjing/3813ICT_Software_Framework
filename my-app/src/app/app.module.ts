@@ -9,18 +9,21 @@ import { LoginComponent } from './login/login.component';
 import { GroupComponent } from './group/group.component';
 import { MongoService } from './mongo.service';
 import { FileSystemService} from './file-system.service';
+import { ChannelComponent } from './channel/channel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    GroupComponent
+    GroupComponent,
+    ChannelComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       {"path":"login","component":LoginComponent},
       {"path":"group","component":GroupComponent},
+      {"path":"channel","component":ChannelComponent},
     ]),
     FormsModule,
     HttpClientModule
