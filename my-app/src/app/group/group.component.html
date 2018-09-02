@@ -1,53 +1,98 @@
-<p>
-  group works!
-</p>
 <form (submit)="logoutUser($event)">
-  <button type="submit">Log Out</button>
+  <button id="logoutBtn" class="btn btn-success btn-primary" type="submit">Log Out</button>
 </form>
-<h2>Groups:</h2>
-<div data-toggle="modal" data-target="#add_user">
-    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Add user">Add a User</button>
-</div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_group">Add a group</button>
-<div class="row">
-  <div class="col-sm-6">
-    <div class='card' *ngFor="let group of combined_list">
-      <div class="card-header row">
-        <div class="col-sm-4">
-          <h5>
-            {{group.name}}
-          </h5>
-        </div>
-        <div class="col-sm-4" data-toggle="tooltip" data-placement="top" title="Add Channel">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_channel" (click)="adding_channel(group.name)">Add Channel</button>
-            <span><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_user_group" (click)="adding_channel(group.name)">Add user to Channel</button></span>
-        </div>
-        <div class="col-sm-4">
-            <button (click)="delete_group(group.name)">delete group</button>
+<div class="row" style="margin-right: 0px;">
+  <div class="col-sm-10" id="groups">
+    <div class="card" id="card">
+      <div class="card-header" id="cardhead">
+        <div class="row">
+          <div class="col-sm-10">
+              <h2>Groups:</h2>
+          </div>
+          <div class="col-sm-2">
+              <span data-toggle="tooltip" data-placement="top" title="Add Groups">
+                  <button *ngIf="isgroupadmin" type="button" class="btn btn-success btn-primary" data-toggle="modal" data-target="#add_group">Add a group</button>
+                </span>
+          </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngFor="let channel of group.channels">
-          <button class='btn btn-block btn-info' (click)="openChannel(channel.name)">{{ channel.name }} </button>
-          <span><button (click)="delete_channel($event)">delete channel</button></span>
-          <span><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_user_channel" (click)="adding_user_channel(channel.name)">Add user to Channel</button></span>
+      <div class="card-body" id="cardbody">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class='card' *ngFor="let group of combined_list">
+              <div class="card-header" id="cardhead">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h3>
+                      {{group.name}}
+                    </h3>
+                  </div>
+                  <span *ngIf="isgroupadmin" id="channelBtn" class="col-sm-2" data-toggle="tooltip" data-placement="top" title="Add Channel"><button id="addchannel" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#add_channel" (click)="adding_channel(group.name)">Add Channel</button></span>
+                  <span *ngIf="isgroupadmin" id="spandeleteBtn" class="col-sm-1" data-toggle="tooltip" data-placement="top" title="Group Users"><button id="addUserBtn" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#user_group" (click)="group_users(group.name,group.users)"><img id="addUserImage" src="../assets/iconperson.png"></button></span>
+                  <span *ngIf="isgroupadmin" id="spanaddBtn" class="col-sm-1" data-toggle="tooltip" data-placement="top" title="Delete Group"><button (click)="delete_group(group.name)" id="deleteBtn" class="btn btn-primary btn-danger btn-block"><img id="addUserImage" src="../assets/x-icon.png"></button></span>
+                </div>
+              </div>
+              <div class="card-body">
+                <div *ngFor="let channel of group.channels" class="row" style="margin-bottom: 5px;">
+                  <span class="col-sm-10" id="channelBtn"><button class='btn btn-info btn-block' (click)="openChannel(channel.name,group.name)" style="padding-bottom: 10px;">{{ channel.name }} </button></span>
+                  <span *ngIf="isgroupadmin" class="col-sm-1" id="spanaddBtn" data-toggle="tooltip" data-placement="top" title="Channel Users"><button id="addUserBtn" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#user_channel" (click)="channel_users(channel.name, channel.users,group.name)"><img id="addUserImage" src="../assets/iconperson.png"></button></span>
+                  <span *ngIf="isgroupadmin" class="col-sm-1" id="spandeleteBtn"data-toggle="tooltip" data-placement="top" title="Delete Channels"><button id="deleteBtn" class="btn btn-primary btn-danger btn-block" (click)="delete_channel(channel.name)"><img id="addUserImage" src="../assets/x-icon.png"></button></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-2" id="users">
+    <div class="card">
+      <div class="card-header" id="cardhead">
+        <div class="row">
+          <div class="col-sm-12 text-center">
+              <h3>Users:</h3>
+          </div>
+          <div class="col-sm-12">
+              <span *ngIf="isgroupadmin" data-toggle="modal" data-target="#add_user">
+                  <button type="button" class="btn btn-block btn-success btn-primary" data-toggle="tooltip" data-placement="top" title="Add user">Add a User</button>
+              </span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" id="userbody">
+        <div class="card" *ngFor="let users of user_list" style="margin-bottom: 5px;">
+          <div class="card-body">
+            <div class="row">
+              <span class="col-sm-12">
+                  <h5>{{users.name}}</h5>
+              </span>
+              <button *ngIf="issuperadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user(users.name)" data-toggle="tooltip" data-placement="top" title="Delete Users"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
+              <span *ngIf="isgroupadmin" data-toggle="modal" data-target="#edit_user">
+                <button id="usereditBtn" class="btn btn-primary btn-secondary" (click)="edit_user(users.name,users.email,users.roles)" data-toggle="tooltip" data-placement="top" title="Edit Users"><img id="userdeleteImg" src="../assets/icon-edit.png"></button>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
+
 <div class="modal fade" id="add_user" tabindex="-1" role="dialog" aria-labelledby="add_userTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <form (submit)="addUser($event)">
-        <div class="modal-header">
+        <div class="modal-header" id="cardhead">
           <h5 class="modal-title" id="add_userTitle">Add User</h5>
         </div>
         <div class="modal-body">
                 <div class="row">
                   <div class= "col-sm-6">
                     Username:<br>
-                    <input type="text" [(ngModel)]='username' name="username"><br>
+                    <input type="text" [(ngModel)]='username' name="username" required><br>
                     Email:<br>
                     <input type="email" [(ngModel)]='useremail' name="email"><br>
                   </div>
@@ -56,108 +101,173 @@
                     <select name="roles" [(ngModel)]='userrole'>
                       <option value="User">User</option>
                       <option value="Group_User">Group_User</option>
-                      <option value="Super_User">Super_User</option>
+                      <option *ngIf="issuperadmin" value="Super_User">Super_User</option>
                     </select><br>
                   </div>
                 </div>
+                <div *ngIf="unamefalse" id="errormessage"><h4>Invalid input! Please enter a user name</h4></div>
+                <div *ngIf="uemailfalse" id="errormessage"><h4>Invalid input! Please enter a user email</h4></div>
         </div>
         <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Add User</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="ureset()">Cancel</button>
+              <button type="submit" class="btn btn-success btn-primary">Add User</button>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="edit_user" tabindex="-1" role="dialog" aria-labelledby="edit_userTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form (submit)="editUser($event)">
+        <div class="modal-header" id="cardhead">
+          <h5 class="modal-title" id="edit_userTitle">Add User</h5>
+        </div>
+        <div class="modal-body">
+                <div class="row">
+                  <div class= "col-sm-6">
+                    Username:<br>
+                    <input type="text" [(ngModel)]='editusername' name="username"><br>
+                    Email:<br>
+                    <input type="email" [(ngModel)]='edituseremail' name="email"><br>
+                  </div>
+                  <div class= "col-sm-6">
+                    Roles:<br>
+                    <select name="roles" [(ngModel)]='edituserrole'>
+                      <option value="User">User</option>
+                      <option value="Group_User">Group_User</option>
+                      <option *ngIf="issuperadmin" value="Super_User">Super_User</option>
+                    </select><br>
+                  </div>
+                </div>
+                <div *ngIf="eunamefalse" id="errormessage"><h4>Invalid input! Please enter a user name</h4></div>
+                <div *ngIf="euemailfalse" id="errormessage"><h4>Invalid input! Please enter a user email</h4></div>
+        </div>
+        <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="eureset()">Cancel</button>
+              <button type="submit" class="btn btn-success btn-primary">Add User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="add_group" tabindex="-1" role="dialog" aria-labelledby="add_groupTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <form (submit)="addGroup($event)">
-          <div class="modal-header">
+          <div class="modal-header" id="cardhead">
             <h5 class="modal-title" id="add_groupTitle">Add Group</h5>
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class= "col-sm-6">
+              <div class= "col-sm-12">
                 Group Name:<br>
                 <input type="text" [(ngModel)]='groupname' name="groupname"><br>
+                <div *ngIf="gnamefalse" id="errormessage"><h4>Invalid input! Please enter a group name</h4></div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Add Group</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="greset()">Cancel</button>
+            <button type="submit" class="btn btn-success btn-primary">Add Group</button>
           </div>
         </form>
       </div>
     </div>
   </div>
+
+
 <div class="modal fade" id="add_channel" tabindex="-1" role="dialog" aria-labelledby="add_channelTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <form (submit)="addChannel($event)">
-        <div class="modal-header">
+        <div class="modal-header" id="cardhead">
           <h5 class="modal-title" id="add_channelTitle">Add Channel</h5>
         </div>
         <div class="modal-body">
           <div class="row">
-            <div class= "col-sm-6">
+            <div class= "col-sm-12">
               Channel Name:<br>
               <input type="text" [(ngModel)]='channelname' name="channelname"><br>
+              <div *ngIf="cnamefalse" id="errormessage"><h4>Invalid input! Please enter a channel name</h4></div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add Channel</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="creset()">Cancel</button>
+          <button type="submit" class="btn btn-success btn-primary" >Add Channel</button>
         </div>
       </form>
     </div>
   </div>
 </div>
-<div class="modal fade" id="add_user_group" tabindex="-1" role="dialog" aria-labelledby="add_user_groupTitle" aria-hidden="true">
+
+<div class="modal fade" id="user_channel" tabindex="-1" role="dialog" aria-labelledby="user_channelTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <form (submit)="addUserGroup($event)">
-        <div class="modal-header">
-          <h5 class="modal-title" id="add_user_groupTitle">Add Group User</h5>
+        <div class="modal-header" id="cardhead">
+          <h5 class="modal-title" id="user_channelTitle">User's of Channel</h5>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class= "col-sm-6">
-              User's Name:<br>
-              <input type="text" [(ngModel)]='groupusername' name="groupusername"><br>
-            </div>
+          <div class="conatiner-fluid" id="useraddDiv">
+            <form (submit)="addUserChannel($event)" class="text-center">
+                <input type="text" [(ngModel)]='channelusername' name="channeusername">
+              <span><button id="useraddBtn" type="submit" class="btn btn-success btn-primary">Add User</button></span>
+            </form>
+            <div *ngIf="cunamefalse" id="errormessage"><h4>Invalid input! Please enter valid user name</h4></div>
+            <div *ngIf="cuserfalse" id="errormessage"><h4>Unkown User! Please enter valid user name</h4></div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Add User</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="add_user_channel" tabindex="-1" role="dialog" aria-labelledby="add_user_channelTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <form (submit)="addUserChannel($event)">
-          <div class="modal-header">
-            <h5 class="modal-title" id="add_user_channelTitle">Add Group User</h5>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class= "col-sm-6">
-                User's Name:<br>
-                <input type="text" [(ngModel)]='channelusername' name="channelusername"><br>
+          <div class="card" *ngFor="let users of c_user_list" style="margin-bottom: 5px;">
+            <div class="card-body">
+              <div class="row">
+                <span class="col-sm-12">
+                    <h5>{{users}}</h5>
+                </span>
+                <button *ngIf="isgroupadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user_channel(users)"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
               </div>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Add User</button>
-          </div>
-        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cureset()">Cancel</button>
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal fade" id="user_group" tabindex="-1" role="dialog" aria-labelledby="user_groupTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header" id="cardhead">
+          <h5 class="modal-title" id="user_groupTitle">User's of Channel</h5>
+        </div>
+        <div class="modal-body">
+          <div class="conatiner-fluid" id="useraddDiv">
+            <form (submit)="addUserGroup($event)" class="text-center">
+              <input type="text" [(ngModel)]='groupusername' name="groupusername">
+              <span><button id="useraddBtn" type="submit" class="btn btn-success btn-primary">Add User</button></span>
+            </form>
+            <div *ngIf="gunamefalse" id="errormessage"><h4>invalid Input! Please enter valid user name</h4></div>
+            <div *ngIf="guserfalse" id="errormessage"><h4>Unkown User! Please enter valid user name</h4></div>
+          </div>
+          <div id="usercard">
+            <div class="card" *ngFor="let users of g_user_list" style="margin-bottom: 5px;">
+              <div class="card-body">
+                <div class="row">
+                  <span class="col-sm-12">
+                    <h5>{{users}}</h5>
+                  </span>
+                  <button *ngIf="isgroupadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user_group(users)"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="gureset()">Cancel</button>
+        </div>
+    </div>
+  </div>
+</div>

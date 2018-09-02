@@ -1,1 +1,135 @@
 /* You can add global styles to this file, and also import other style files */
+#pageHeader{
+    background-color: #2d2f33;
+    color: white;
+    margin-bottom: 0px;
+}
+
+#secondpageHeader{
+    background-color: #2d2f33;
+    color: white;
+}
+
+#addUserImage{
+    height:30px;
+    width: 30px;
+}
+#addUserBtn{
+    padding:5px;
+}
+
+#deleteBtn{
+    padding: 5px;
+}
+
+#logoutBtn{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+#backBtn{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+#channelBtn{
+    padding: 0px
+}
+
+#spandeleteBtn{
+    padding: 0px
+}
+
+#spanaddBtn{
+    padding: 0px
+}
+#addchannel{
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-bottom: 10px;
+}
+
+#cardhead{
+    background-color: #2d2f33;
+    color: white;
+}
+
+#cardbody{
+    height: 100%;
+    max-height: 435px;
+    overflow-y: scroll;
+}
+
+#card{
+    margin-bottom: 20px;
+}
+
+body{
+    background-color: #53565e;
+}
+
+#groups{
+    padding-left: 30px;
+}
+
+#users{
+    padding-right: 15px;
+}
+
+#userbody{
+    height: 100%;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+#userdeleteBtn{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 3px;
+}
+#userdeleteImg{
+    height: 20px;
+    width: 20px;
+}
+
+#usereditBtn{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 3px;
+}
+#userdeleteImg{
+    height: 20px;
+    width: 20px;
+}
+
+#useraddBtn{
+    padding-bottom: 6px;
+    padding-top: 6px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+#useraddDiv{
+    margin-bottom: 10px;
+}
+
+#usercard{
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+#logincard{
+    margin-top: 100px;
+}
+
+#errormessage{
+    margin-top: 10px;
+    background-color: #f27674;
+}

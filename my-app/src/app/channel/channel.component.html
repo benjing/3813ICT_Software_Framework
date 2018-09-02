@@ -1,3 +1,82 @@
-<p>
-  channel works!
-</p>
+<button id="backBtn" class="btn btn-success btn-primary" (click)="back()">Go Back</button>
+<div class="row" style="margin-right: 0px;">
+  <div class="col-sm-10" id="groups">
+    <div class="card">
+      <div class="card-header" id="cardhead">
+        <h2>Channel: {{channel.channel_name}}</h2>
+      </div>
+      <div class="card-body" id="cardbody">
+        <div class="row">
+          <div class="col-sm-12">
+            <div *ngFor="let message of message_list">
+              <span><p>{{message.name}} : </p></span>
+              <span><p>{{message.message}}</p></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <form>
+            Message:
+            <input type="text">
+            <button class="btn btn-primary btn-success">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-2" id="users">
+    <div class="card">
+      <div class="card-header" id="cardhead">
+          <div class="col-sm-12 text-center">
+              <h3>Users:</h3>
+          </div>
+          <div class="col-sm-12">
+            <span data-toggle="modal" data-target="#add_user_channel">
+                <button type="button" class="btn btn-block btn-success" data-toggle="tooltip" data-placement="top" title="Add user">Add a User</button>
+            </span>
+          </div>
+      </div>
+      <div class="card-body" id="userbody">
+        <div class="card" *ngFor="let users of c_user_list" style="margin-bottom: 5px;">
+          <div class="card-body">
+            <div class="row">
+              <span class="col-sm-12">
+                  <h5>{{users.name}}</h5>
+              </span>
+              <button *ngIf="issuperadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user_channel(users.name)" data-toggle="tooltip" data-placement="top" title="Delete Users"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="add_user_channel" tabindex="-1" role="dialog" aria-labelledby="add_user_channelTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <form (submit)="addUserChannel($event)">
+          <div class="modal-header" id="cardhead">
+            <h5 class="modal-title" id="add_user_channelTitle">Add Group User</h5>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class= "col-sm-12">
+                User's Name:<br>
+                <input type="text" [(ngModel)]='channelusername' name="channelusername"><br>
+                <div *ngIf="cunamefalse" id="errormessage"><h4>Invalid input! Please enter valid user name</h4></div>
+                <div *ngIf="cuserfalse" id="errormessage"><h4>Unkown User! Please enter valid user name</h4></div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Add User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

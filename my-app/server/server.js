@@ -21,11 +21,10 @@ mongoose.connect(url, {poolSize:11}, function(err, client){
     // const dbName = 'test';
     // const db = client.db(dbName);
     const db = mongoose.connection;
-    require('./routes/login.js')(app,db,fs);
+    require('./routes/auth.js')(app,db,fs);
     require('./routes/user.js')(app,db,fs);
     require('./routes/group.js')(app,db,fs);
     require('./routes/channel.js')(app,db,fs);
-    require('./routes.js')(app,path);
     require('./socket.js')(app,io);
     require('./listen.js')(http);
 });

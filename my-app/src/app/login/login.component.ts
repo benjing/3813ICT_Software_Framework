@@ -11,31 +11,31 @@ import {FileSystemService} from '../file-system.service'
 })
 export class LoginComponent implements OnInit {
   username:string = '';
+  isfalse:boolean
 
   constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService) { }
 
   ngOnInit() {
-
+    //if browser supports storage
     if (typeof(Storage) !== "undefined"){
       console.log("found")
     }
   }
-
+  //checks the given username agaisnt the list of known users, logs in if same name found othwise gives warning.
   loginUser(event){
     event.preventDefault();
     this.fs.check_user(this.username).subscribe(data =>{
-      console.log(data)
       var result = data
+      //if the response from the server is true then log in.
       if(result.success == true){
-        localStorage.setItem("roles", result.username[0].roles)
+        localStorage.setItem("roles", result.username.roles)
         localStorage.setItem("username", this.username);
         this.router.navigateByUrl('/group')
         return
       }
-      alert("Unkown User")
+      //otherwise if response from server is false then give error message.
+      this.isfalse = true
     })
-    // localStorage.setItem("username", this.username);
-    // this.router.navigateByUrl('/group')
   }
 
 }
