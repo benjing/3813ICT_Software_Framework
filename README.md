@@ -5,6 +5,7 @@ Installing/Running
 
 1. First pull the project from GitHub
 2. Run Npm install in the server folder
+3. install express, mongo ,mongoose and socket.io
 3. run node server.js
 
 # Git Layout
