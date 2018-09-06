@@ -1,4 +1,4 @@
-# 3813ICT_Software_Framework_Assignment_1
+# 3813ICT_Software_Framework
 # Documentation
 
 Installing/Running
