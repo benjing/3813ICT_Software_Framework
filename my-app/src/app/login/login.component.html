@@ -7,7 +7,11 @@
     <div class="card" id="logincard">
       <form (submit)="loginUser($event)">
         <div class="card-body text-center">
-          <span><input placeholder="Username" [(ngModel)]='username' name="username" id="username"></span>
+          <span><h2>Log into Chat</h2></span><br>
+          <h4>Username:</h4>
+          <span><input placeholder="Username" [(ngModel)]='username' name="username" id="username"></span><br>
+          <h4>Password:</h4>
+          <span><input type="password" placeholder="Password" [(ngModel)]='password' name="password" id="password"></span>
           <div *ngIf="isfalse" id="errormessage"><h4>Unauthorized User</h4></div>
         </div>
         <div class="card-footer">

@@ -1,1 +1,1 @@
-[]
+[{"channel_name":"test1","group_id":"test","users":["super","terry"]},{"channel_name":"test 3","group_id":"test","users":["super"]},{"channel_name":"test 4","group_id":"test","users":["super"]},{"channel_name":"test","group_id":"test 4","users":["ben"]},{"channel_name":"test 6","group_id":"test 4","users":["ben"]}]

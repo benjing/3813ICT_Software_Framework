@@ -12,9 +12,10 @@ export class FileSystemService {
 
 
   //check if user exists
-  check_user(username:string): Observable<any>{
+  check_user(username:string,password:string): Observable<any>{
     return this.http.post('/api/auth',{
-      username:username
+      username:username,
+      password:password
     });
   }
 

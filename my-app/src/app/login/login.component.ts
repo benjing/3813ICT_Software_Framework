@@ -11,6 +11,7 @@ import {FileSystemService} from '../file-system.service'
 })
 export class LoginComponent implements OnInit {
   username:string = '';
+  password:string = '';
   isfalse:boolean
 
   constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService) { }
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit {
   //checks the given username agaisnt the list of known users, logs in if same name found othwise gives warning.
   loginUser(event){
     event.preventDefault();
-    this.fs.check_user(this.username).subscribe(data =>{
+    this.fs.check_user(this.username, this.password).subscribe(data =>{
       var result = data
       //if the response from the server is true then log in.
       if(result.success == true){

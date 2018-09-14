@@ -1,1 +1,1 @@
-[{"name":"super","email":"super@gmail.com","roles":["User","Group_User","Super_User"]}]
+[{"name":"super","email":"super@gmail.com","password":"ten","roles":["User","Group_User","Super_User"]},{"name":"terry","email":"terry@gmail.com","password":"hello","roles":["User"]}]
