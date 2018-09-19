@@ -115,12 +115,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mongo_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mongo.service */ "./src/app/mongo.service.ts");
 /* harmony import */ var _file_system_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./file-system.service */ "./src/app/file-system.service.ts");
 /* harmony import */ var _channel_channel_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./channel/channel.component */ "./src/app/channel/channel.component.ts");
+/* harmony import */ var _socket_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./socket.service */ "./src/app/socket.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -153,7 +155,7 @@ var AppModule = /** @class */ (function () {
                 _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"]
             ],
-            providers: [_mongo_service__WEBPACK_IMPORTED_MODULE_8__["MongoService"], _file_system_service__WEBPACK_IMPORTED_MODULE_9__["FileSystemService"]],
+            providers: [_mongo_service__WEBPACK_IMPORTED_MODULE_8__["MongoService"], _file_system_service__WEBPACK_IMPORTED_MODULE_9__["FileSystemService"], _socket_service__WEBPACK_IMPORTED_MODULE_11__["SocketService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
         })
     ], AppModule);
@@ -182,7 +184,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<button id=\"backBtn\" class=\"btn btn-success btn-primary\" (click)=\"back()\">Go Back</button>\r\n<div class=\"row\" style=\"margin-right: 0px;\">\r\n  <div class=\"col-sm-10\" id=\"groups\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <h2>Channel: {{channel.channel_name}}</h2>\r\n      </div>\r\n      <div class=\"card-body\" id=\"cardbody\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12\">\r\n            <div *ngFor=\"let message of message_list\">\r\n              <span><p>{{message.name}} : </p></span>\r\n              <span><p>{{message.message}}</p></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-footer\">\r\n        <div>\r\n          <form>\r\n            Message:\r\n            <input type=\"text\">\r\n            <button class=\"btn btn-primary btn-success\">Send Message</button>\r\n          </form>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-sm-2\" id=\"users\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n          <div class=\"col-sm-12 text-center\">\r\n              <h3>Users:</h3>\r\n          </div>\r\n          <div class=\"col-sm-12\">\r\n            <span data-toggle=\"modal\" data-target=\"#add_user_channel\">\r\n                <button type=\"button\" class=\"btn btn-block btn-success\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add user\">Add a User</button>\r\n            </span>\r\n          </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"userbody\">\r\n        <div class=\"card\" *ngFor=\"let users of c_user_list\" style=\"margin-bottom: 5px;\">\r\n          <div class=\"card-body\">\r\n            <div class=\"row\">\r\n              <span class=\"col-sm-12\">\r\n                  <h5>{{users.name}}</h5>\r\n              </span>\r\n              <button *ngIf=\"issuperadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_channel(users.name)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Users\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n<div class=\"modal fade\" id=\"add_user_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_user_channelTitle\" aria-hidden=\"true\">\r\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n        <form (submit)=\"addUserChannel($event)\">\r\n          <div class=\"modal-header\" id=\"cardhead\">\r\n            <h5 class=\"modal-title\" id=\"add_user_channelTitle\">Add Group User</h5>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <div class=\"row\">\r\n              <div class= \"col-sm-12\">\r\n                User's Name:<br>\r\n                <input type=\"text\" [(ngModel)]='channelusername' name=\"channelusername\"><br>\r\n                <div *ngIf=\"cunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter valid user name</h4></div>\r\n                <div *ngIf=\"cuserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\r\n            <button type=\"submit\" class=\"btn btn-primary\">Add User</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n"
+module.exports = "<button id=\"backBtn\" class=\"btn btn-success btn-primary\" (click)=\"back()\">Go Back</button>\r\n<div class=\"row\" style=\"margin-right: 0px;\">\r\n  <div class=\"col-sm-10\" id=\"groups\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <h2>Channel: {{channel_name}}</h2>\r\n      </div>\r\n      <div class=\"card-body\" id=\"cardbody\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12\">\r\n            <div *ngFor=\"let message of message_list\">\r\n              <span><p>{{message.name}} : </p></span>\r\n              <span><p>{{message.message}}</p></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-footer\">\r\n        <div>\r\n          <form>\r\n            Message:\r\n            <input [(ngModel)]='message' name=\"message\" id=\"message\">\r\n            <button class=\"btn btn-primary btn-success\" (click)=\"sendMessage()\">Send Message</button>\r\n          </form>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-sm-2\" id=\"users\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n          <div class=\"col-sm-12 text-center\">\r\n              <h3>Users:</h3>\r\n          </div>\r\n          <div class=\"col-sm-12\">\r\n            <span data-toggle=\"modal\" data-target=\"#add_user_channel\">\r\n                <button type=\"button\" class=\"btn btn-block btn-success\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add user\">Add a User</button>\r\n            </span>\r\n          </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"userbody\">\r\n        <div class=\"card\" *ngFor=\"let users of c_user_list\" style=\"margin-bottom: 5px;\">\r\n          <div class=\"card-body\">\r\n            <div class=\"row\">\r\n              <span class=\"col-sm-12\">\r\n                  <h5>{{users.name}}</h5>\r\n              </span>\r\n              <button *ngIf=\"issuperadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_channel(users.name)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Users\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n<div class=\"modal fade\" id=\"add_user_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_user_channelTitle\" aria-hidden=\"true\">\r\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n        <form (submit)=\"addUserChannel($event)\">\r\n          <div class=\"modal-header\" id=\"cardhead\">\r\n            <h5 class=\"modal-title\" id=\"add_user_channelTitle\">Add Group User</h5>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <div class=\"row\">\r\n              <div class= \"col-sm-12\">\r\n                User's Name:<br>\r\n                <input type=\"text\" [(ngModel)]='channelusername' name=\"channelusername\"><br>\r\n                <div *ngIf=\"cunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter valid user name</h4></div>\r\n                <div *ngIf=\"cuserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\r\n            <button type=\"submit\" class=\"btn btn-primary\">Add User</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n"
 
 /***/ }),
 
@@ -201,6 +203,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _mongo_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mongo.service */ "./src/app/mongo.service.ts");
 /* harmony import */ var _file_system_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../file-system.service */ "./src/app/file-system.service.ts");
+/* harmony import */ var _socket_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../socket.service */ "./src/app/socket.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -215,23 +218,45 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var ChannelComponent = /** @class */ (function () {
-    function ChannelComponent(router, form, mongo, fs) {
+    function ChannelComponent(router, form, mongo, fs, socket) {
         this.router = router;
         this.form = form;
         this.mongo = mongo;
         this.fs = fs;
+        this.socket = socket;
         this.isgroupadmin = false;
         this.issuperadmin = false;
         this.cunamefalse = false;
         this.cuserfalse = false;
         this.user_list = [];
         this.c_user_list = [];
+        this.channel_name = localStorage.getItem("channel_name");
     }
     //this is on load
     ChannelComponent.prototype.ngOnInit = function () {
+        var _this = this;
         this.get_channel();
         this.getUsers();
+        //checks if user is logged in
+        if (!localStorage.getItem('username')) {
+            console.log('Not validated');
+            localStorage.clear();
+            alert("Not valid User");
+            this.router.navigateByUrl('login');
+        }
+        else {
+            //gets the username from local storage
+            this.username = localStorage.getItem('username');
+            console.log("session started for: " + this.username);
+            this.connection = this.socket.getMessages().subscribe(function (message) {
+                var result = message;
+                console.log(result);
+                _this.message_list.push(message);
+                _this.message = '';
+            });
+        }
         //checks if the logged in user is either a group user or super user
         if (localStorage.getItem("roles").includes("Group_User")) {
             this.isgroupadmin = true;
@@ -272,8 +297,18 @@ var ChannelComponent = /** @class */ (function () {
             this.c_user_list.push({ name: channel.users[i] });
         }
         console.log(this.channel);
-        console.log(this.user_list);
+        console.log(this.c_user_list);
         console.log(this.message_list);
+    };
+    ChannelComponent.prototype.sendMessage = function () {
+        console.log(this.message);
+        //send a chat message
+        this.socket.sendMessage({ name: this.username, message: this.message });
+    };
+    ChannelComponent.prototype.ngOnDestroy = function () {
+        if (this.connection) {
+            this.connection.unsubscribe();
+        }
     };
     //add user to channel
     ChannelComponent.prototype.addUserChannel = function (event) {
@@ -338,7 +373,7 @@ var ChannelComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./channel.component.html */ "./src/app/channel/channel.component.html"),
             styles: [__webpack_require__(/*! ./channel.component.css */ "./src/app/channel/channel.component.css")]
         }),
-        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormsModule"], _mongo_service__WEBPACK_IMPORTED_MODULE_3__["MongoService"], _file_system_service__WEBPACK_IMPORTED_MODULE_4__["FileSystemService"]])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormsModule"], _mongo_service__WEBPACK_IMPORTED_MODULE_3__["MongoService"], _file_system_service__WEBPACK_IMPORTED_MODULE_4__["FileSystemService"], _socket_service__WEBPACK_IMPORTED_MODULE_5__["SocketService"]])
     ], ChannelComponent);
     return ChannelComponent;
 }());
@@ -1045,7 +1080,7 @@ var LoginComponent = /** @class */ (function () {
             var result = data;
             //if the response from the server is true then log in.
             if (result.success == true) {
-                localStorage.setItem("roles", result.username.roles);
+                localStorage.setItem("roles", result.users[0].roles);
                 localStorage.setItem("username", _this.username);
                 _this.router.navigateByUrl('/group');
                 return;
@@ -1096,6 +1131,13 @@ var MongoService = /** @class */ (function () {
     function MongoService(http) {
         this.http = http;
     }
+    //check if user exists
+    MongoService.prototype.check_user = function (username, password) {
+        return this.http.post('/api/auth', {
+            username: username,
+            password: password
+        });
+    };
     //get all users
     MongoService.prototype.get_users = function () {
         return this.http.get('/api/users', {});
@@ -1170,6 +1212,63 @@ var MongoService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/socket.service.ts":
+/*!***********************************!*\
+  !*** ./src/app/socket.service.ts ***!
+  \***********************************/
+/*! exports provided: SocketService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SocketService", function() { return SocketService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_2__);
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var SocketService = /** @class */ (function () {
+    function SocketService() {
+        this.url = "http://localhost:3000";
+    }
+    SocketService.prototype.sendMessage = function (message) {
+        this.socket.emit('add-message', message);
+    };
+    SocketService.prototype.getMessages = function () {
+        var _this = this;
+        var obmessages = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__();
+            //listen for messages event
+            _this.socket.on('message', function (data) { observer.next(data); });
+            //when the observer ends then disconnect
+            return function () { _this.socket.disconnect(); };
+        });
+        return obmessages;
+    };
+    SocketService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [])
+    ], SocketService);
+    return SocketService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/environments/environment.ts":
 /*!*****************************************!*\
   !*** ./src/environments/environment.ts ***!
@@ -1232,6 +1331,17 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 
 module.exports = __webpack_require__(/*! C:\Users\Ben\Google Drive\3813ICT_Software_Framework\3813ICT_Software_Framework_Assignment_1\my-app\src\main.ts */"./src/main.ts");
 
+
+/***/ }),
+
+/***/ 1:
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 

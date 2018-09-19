@@ -10,6 +10,7 @@ import { GroupComponent } from './group/group.component';
 import { MongoService } from './mongo.service';
 import { FileSystemService} from './file-system.service';
 import { ChannelComponent } from './channel/channel.component';
+import { SocketService } from './socket.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { ChannelComponent } from './channel/channel.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [MongoService, FileSystemService],
+  providers: [MongoService, FileSystemService, SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,6 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {MongoService} from '../mongo.service'
 import {FileSystemService} from '../file-system.service'
+import {SocketService} from '../socket.service'
 
 @Component({
   selector: 'app-channel',
@@ -22,13 +23,34 @@ export class ChannelComponent implements OnInit {
   channelusername:any
   user_name_list:any
   userOBJ:any
+  username:any
+  message:any
+  connection;
+  channel_name = localStorage.getItem("channel_name")
 
-  constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService) { }
+  constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService, private socket:SocketService) { }
 
   //this is on load
   ngOnInit() {
     this.get_channel();
     this.getUsers()
+    //checks if user is logged in
+    if (!localStorage.getItem('username')){
+      console.log('Not validated');
+      localStorage.clear();
+      alert("Not valid User")
+      this.router.navigateByUrl('login');
+    }else{
+      //gets the username from local storage
+      this.username = localStorage.getItem('username');
+      console.log("session started for: "+this.username);
+      this.connection = this.socket.getMessages().subscribe(message=>{
+        var result = message
+        console.log(result)
+        this.message_list.push(message);
+        this.message = '';
+      })
+    }
     //checks if the logged in user is either a group user or super user
     if(localStorage.getItem("roles").includes("Group_User")){
       this.isgroupadmin = true
@@ -66,8 +88,20 @@ export class ChannelComponent implements OnInit {
       this.c_user_list.push({name: channel.users[i]})
     }
     console.log(this.channel)
-    console.log(this.user_list)
+    console.log(this.c_user_list)
     console.log(this.message_list)
+  }
+
+  sendMessage(){
+    console.log(this.message)
+    //send a chat message
+    this.socket.sendMessage({name:this.username,message:this.message});
+  }
+
+  ngOnDestroy() {
+    if (this.connection){
+      this.connection.unsubscribe();
+    }
   }
   //add user to channel
   addUserChannel(event){

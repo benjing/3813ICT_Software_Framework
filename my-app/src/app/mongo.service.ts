@@ -9,6 +9,14 @@ export class MongoService {
 
   constructor(private http: HttpClient) { }
 
+  //check if user exists
+  check_user(username:string,password:string): Observable<any>{
+    return this.http.post('/api/auth',{
+      username:username,
+      password:password
+    });
+  }
+  
   //get all users
   get_users():Observable<any>{
     return this.http.get('/api/users',{
