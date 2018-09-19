@@ -10,17 +10,18 @@ app.use(express.static(path.join(__dirname , '../dist/my-app')));
 const fs = require('fs');
 
 
-var mongoose = require('mongoose')
+// var mongoose = require('mongoose')
 
-// const MongoClient = require('mongodb').MongoClient;
-// const url = 'mongodb://localhost:27017';
-const url = 'mongodb://localhost/test';
-mongoose.connect(url, {poolSize:11}, function(err, client){
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb://localhost:27017';
+// const url = 'mongodb://localhost/test';
+// mongoose.connect(url, {poolSize:11}, function(err, client){
+MongoClient.connect(url,{poolsize:10},function(err, client){
 
     if (err) {return console.log(err)}
-    // const dbName = 'test';
-    // const db = client.db(dbName);
-    const db = mongoose.connection;
+    const dbName = 'test';
+    const db = client.db(dbName);
+    // const db = mongoose.connection;
     require('./routes/auth.js')(app,db,fs);
     require('./routes/user.js')(app,db,fs);
     require('./routes/group.js')(app,db,fs);

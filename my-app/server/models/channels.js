@@ -6,10 +6,10 @@ var chatChannel = new Schema({
         type: Date,
         defualt: Date.now
     },
-    channel_id: String,
     channel_name: String,
+    group_id:String,
+    Users:[],
     messages: [{name:String,message:String}],
-    Users: [{name:String}]
 });
 
 export default mongoose.model('channels', chatChannel);

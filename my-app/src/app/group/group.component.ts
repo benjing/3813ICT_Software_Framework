@@ -11,6 +11,10 @@ import {FileSystemService} from '../file-system.service'
 })
 export class GroupComponent implements OnInit {
 
+  group_name:any
+  channel_name:any
+  channel_id:any
+  group_id:any
   isgroupadmin = false
   issuperadmin = false
   unamefalse = false
@@ -31,6 +35,7 @@ export class GroupComponent implements OnInit {
   g_user_list:any
   username:string = '';
   useremail:string = '';
+  userpassword:string = '';
   userrole:string = 'User';
   userroles:any
   userOBJ:any
@@ -39,8 +44,10 @@ export class GroupComponent implements OnInit {
   btngroupname:any
   channelusername:any
   groupusername:any
+  userid:any
   editusername:any
   edituseremail:any
+  edituserpassword:any
   edituserroles:any
   edituserrole:any
   user_name_list:any
@@ -92,8 +99,8 @@ export class GroupComponent implements OnInit {
     }else{
       if (this.userrole == "Super_User"){
         this.userroles = ["User","Group_User",this.userrole]
-        this.userOBJ = {name:this.username,email:this.useremail,roles:this.userroles}
-        this.fs.add_user(this.userOBJ).subscribe(users =>{
+        this.userOBJ = {name:this.username, password:this.userpassword,email:this.useremail,roles:this.userroles}
+        this.mongo.add_user(this.userOBJ).subscribe(users =>{
           if (users.success == false){
             alert("user already exists")
           }else{
@@ -104,8 +111,8 @@ export class GroupComponent implements OnInit {
       }
       else if(this.userrole == "Group_User"){
         this.userroles = ["User",this.userrole]
-        this.userOBJ = {name:this.username,email:this.useremail,roles:this.userroles}
-        this.fs.add_user(this.userOBJ).subscribe(users =>{
+        this.userOBJ = {name:this.username, password:this.userpassword,email:this.useremail,roles:this.userroles}
+        this.mongo.add_user(this.userOBJ).subscribe(users =>{
           if (users.success == false){
             alert("user already exists")
           }else{
@@ -115,8 +122,8 @@ export class GroupComponent implements OnInit {
         })
       }
       else{
-        this.userOBJ = {name:this.username,email:this.useremail,roles:[this.userrole]}
-        this.fs.add_user(this.userOBJ).subscribe(users =>{
+        this.userOBJ = {name:this.username, password:this.userpassword,email:this.useremail,roles:[this.userrole]}
+        this.mongo.add_user(this.userOBJ).subscribe(users =>{
           if (users.success == false){
             alert("user already exists")
           }else{
@@ -135,7 +142,7 @@ export class GroupComponent implements OnInit {
       this.gnamefalse = true
     }else{
       var groupObj = {group_name:this.groupname,users:[localStorage.getItem("username")]}
-      this.fs.add_group(groupObj).subscribe(groups =>{
+      this.mongo.add_group(groupObj).subscribe(groups =>{
         if (groups.success == false){
           alert("group already exists")
         }else{
@@ -147,12 +154,13 @@ export class GroupComponent implements OnInit {
   }
   // sends a request to the server to get all users then puts them in a list.
   getUsers(){
-    this.fs.get_users().subscribe(users =>{
+    this.mongo.get_users().subscribe(users =>{
       console.log("getting users")
-      console.log(users)
+      console.log(users.users)
       this.user_list = users.users
       this.user_name_list = []
       for(var i = 0; i < users.users.length;i++){
+        console.log("users are: "+users.users[i].name)
         this.user_name_list.push(users.users[i].name)
       }
     })
@@ -166,7 +174,7 @@ export class GroupComponent implements OnInit {
   }
   //sends a request to the server to get all channels then puts them in a list
   getChannels(groups){
-    this.fs.get_channels().subscribe(channels =>{
+    this.mongo.get_channels().subscribe(channels =>{
       console.log(channels)
       this.list_creation(groups,channels)
     })
@@ -179,15 +187,17 @@ export class GroupComponent implements OnInit {
       var groupusers = groups.groups[i].users
       if(groupusers.includes(localStorage.getItem("username")) || localStorage.getItem("roles").includes('super_admin')){
         var obj = {
+            id: groups.groups[i]._id,
             name: groups.groups[i].group_name,
             channels : [],
             users: groups.groups[i].users
         }
         for (var j = 0; j < channels.channels.length; j++){
-          if(groups.groups[i].group_name == channels.channels[j].group_id){
+          if(groups.groups[i]._id == channels.channels[j].group_id){
             var lst = channels.channels[j].users
             if(lst.includes(localStorage.getItem("username")) || localStorage.getItem("roles").includes('Super_User') || localStorage.getItem("roles").includes('Group_User')){
               obj.channels.push({
+                id: channels.channels[j]._id,
                 name: channels.channels[j].channel_name,
                 users: channels.channels[j].users
               })
@@ -204,50 +214,47 @@ export class GroupComponent implements OnInit {
   }
 
   //sends a request to the server to delete a group
-  delete_group(name){
-    console.log("delete group "+name)
-    this.fs.delete_group(name).subscribe(groups =>{
+  delete_group(id){
+    console.log("delete group "+ id)
+    this.mongo.delete_group(id).subscribe(groups =>{
       console.log(groups)
       this.getGroups()
     })
   }
   // sends a request to the server to delete a user
-  delete_user(name){
-    this.fs.delete_users(name).subscribe(users =>{
+  delete_user(id){
+    this.mongo.delete_users(id).subscribe(users =>{
       console.log(users)
       this.getUsers()
     })
   }
   //sets the group name to local storage so it can be accessed later
   adding_channel(name){
-    localStorage.setItem("group_name",name)
-  }
-  //sets the channel name to local storage so it can be accessed later
-  adding_user_channel(cname){
-    localStorage.setItem("channel_name",cname)
+    this.group_id = name
   }
   //this function sets group name channel name and sets the user list to users so it can be displayed in a modal
-  channel_users(name,users,gname){
-    localStorage.setItem("group_name",gname)
-    localStorage.setItem("channel_name",name)
+  channel_users(channelid,users,groupid){
+    this.channel_id = channelid
+    this.group_id = groupid
     this.c_user_list = users
   }
   //this function sets the group name and the use list of the group so it can be displayed in a modal
-  group_users(name,users){
-    localStorage.setItem("group_name", name)
+  group_users(groupid,users){
+    this.group_id = groupid
     this.g_user_list = users
   }
   //this function clears the data a form would hold.
   clearUserData(){
+    this.userpassword = ''
     this.useremail = ''
     this.username = ''
     this.userrole = 'User'
     this.userroles = []
   }
   //this sends a request to the server to delete a channel
-  delete_channel(name){
-    console.log("delete channel "+name)
-    this.fs.delete_channel(name).subscribe(channels=>{
+  delete_channel(id,name){
+    console.log("delete channel "+ name)
+    this.fs.delete_channel(id).subscribe(channels=>{
       console.log(channels)
       this.getGroups()
     })
@@ -260,15 +267,14 @@ export class GroupComponent implements OnInit {
     if(this.channelname == "" || this.channelname == null){
       this.cnamefalse = true
     }else{
-      var channelObj = {channel_name:this.channelname,group_id:localStorage.getItem("group_name"),users:[localStorage.getItem("username")]}
+      var channelObj = {channel_name:this.channelname,group_id:this.group_id,users:[localStorage.getItem("username")]}
       this.fs.add_channel(channelObj).subscribe(channels =>{
         console.log(channels)
         if (channels.success == false){
           alert("channel already exists")
         }else{
+          this.channelname = ""
           this.getGroups();
-          this.channelname = ''
-          localStorage.removeItem("group_name")
         }
       })
     }
@@ -281,8 +287,7 @@ export class GroupComponent implements OnInit {
       this.gunamefalse = true
     }else{
       if(this.user_name_list.includes(this.groupusername)){
-        console.log("Adding user to "+this.groupusername+" group")
-        this.fs.edit_group(this.groupusername,localStorage.getItem("group_name")).subscribe(groups=>{
+        this.mongo.edit_group(this.groupusername,this.group_id).subscribe(groups=>{
           console.log(groups)
           if(this.g_user_list.includes(this.groupusername)){
 
@@ -306,17 +311,18 @@ export class GroupComponent implements OnInit {
     }else{
       if(this.user_name_list.includes(this.channelusername)){
         console.log("Adding user to "+this.channelusername+" group")
-        this.fs.edit_channel(this.channelusername,localStorage.getItem("channel_name")).subscribe(channels=>{
+        this.mongo.edit_channel(this.channelusername,this.channel_id).subscribe(channels=>{
           console.log(channels)
+          //if user already exists in channel
           if(this.c_user_list.includes(this.channelusername)){
 
-          }else{
+          }else{ //then add to channel
             this.c_user_list.push(this.channelusername)
           }
-          this.fs.edit_group(this.channelusername,localStorage.getItem("group_name")).subscribe(groups=>{
+          this.mongo.edit_group(this.channelusername,this.group_id).subscribe(groups=>{
             this.getGroups()
           })
-          this.channelname = ""
+          this.channelusername = ""
         })
       }else{
         this.cuserfalse = true
@@ -325,9 +331,7 @@ export class GroupComponent implements OnInit {
   }
   //this sends a request to the server to delete a user from a channel
   delete_user_channel(users){
-    console.log("deleteing "+users+" from channel "+localStorage.getItem("channel_name"))
-    this.fs.delete_channel_user(localStorage.getItem("channel_name"), users).subscribe(channels=>{
-      console.log(channels)
+    this.mongo.delete_channel_user(this.channel_id, users).subscribe(channels=>{
       this.getGroups()
       for(var i = 0;i<this.c_user_list.length;i++){
         if (this.c_user_list[i] == users){
@@ -338,10 +342,7 @@ export class GroupComponent implements OnInit {
   }
   //this sends a request to the server to delete a user from a group
   delete_user_group(users){
-    console.log("deleteing "+users+" group")
-    console.log("deleteing "+users+" from channel "+localStorage.getItem("channel_name"))
-    this.fs.delete_group_user(localStorage.getItem("group_name"), users).subscribe(channels=>{
-      console.log(channels)
+    this.mongo.delete_group_user(this.group_id, users).subscribe(channels=>{
       this.getGroups()
       for(var i = 0;i<this.g_user_list.length;i++){
         if (this.g_user_list[i] == users){
@@ -379,10 +380,12 @@ export class GroupComponent implements OnInit {
     this.eunamefalse = false
   }
   //this sets the user info of the user clicked when going to edit a us
-  edit_user(name,email,roles){
-    this.editusername = name
-    this.edituseremail = email
-    this.edituserrole = roles[roles.length - 1]
+  edit_user(user){
+    this.userid = user._id
+    this.editusername = user.name
+    this.edituseremail = user.email
+    this.edituserpassword = user.password
+    this.edituserrole = user.roles[user.roles.length - 1]
   }
   //this sends a request to the server to update a user info
   editUser(event){
@@ -399,8 +402,8 @@ export class GroupComponent implements OnInit {
     }else{
       if (this.edituserrole == "Super_User"){
         this.edituserroles = ["User","Group_User",this.edituserrole]
-        this.userOBJ = {name:this.editusername,email:this.edituseremail,roles:this.edituserroles}
-        this.fs.edit_user(this.userOBJ).subscribe(users =>{
+        this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword, email:this.edituseremail, roles:this.edituserroles}
+        this.mongo.edit_user(this.userOBJ).subscribe(users =>{
           if (users.success == false){
             alert("user already exists")
           }else{
@@ -411,8 +414,8 @@ export class GroupComponent implements OnInit {
       }
       else if(this.edituserrole == "Group_User"){
         this.edituserroles = ["User",this.edituserrole]
-        this.userOBJ = {name:this.editusername,email:this.edituseremail,roles:this.edituserroles}
-        this.fs.edit_user(this.userOBJ).subscribe(users =>{
+        this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword, email:this.edituseremail, roles:this.edituserroles}
+        this.mongo.edit_user(this.userOBJ).subscribe(users =>{
           if (users.success == false){
             alert("user already exists")
           }else{
@@ -422,8 +425,8 @@ export class GroupComponent implements OnInit {
         })
       }
       else{
-        this.userOBJ = {name:this.editusername,email:this.edituseremail,roles:[this.edituserrole]}
-        this.fs.edit_user(this.userOBJ).subscribe(users =>{
+        this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword, email:this.edituseremail, roles:[this.edituserrole]}
+        this.mongo.edit_user(this.userOBJ).subscribe(users =>{
           if (users.success == false){
             alert("user already exists")
           }else{

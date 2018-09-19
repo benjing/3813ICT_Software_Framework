@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 var schema = mongoose.Schema;
 
-var ChatUsers = new Schema({
+var chatGroup = new Schema({
     createdAt:{
         type: Date,
         defualt: Date.now
     },
-    user_name: String
+    group_name: String,
+    users:[]
 });
 
-export default mongoose.model('users', ChatUsers);
+export default mongoose.model('channels', chatGroup);

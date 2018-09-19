@@ -27,16 +27,16 @@
                           {{group.name}}
                     </h3>
                   </div>
-                  <span *ngIf="isgroupadmin" id="channelBtn" class="col-sm-2" data-toggle="tooltip" data-placement="top" title="Add Channel"><button id="addchannel" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#add_channel" (click)="adding_channel(group.name)">Add Channel</button></span>
-                  <span *ngIf="isgroupadmin" id="spandeleteBtn" class="col-sm-1" data-toggle="tooltip" data-placement="top" title="Group Users"><button id="addUserBtn" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#user_group" (click)="group_users(group.name,group.users)"><img id="addUserImage" src="../assets/iconperson.png"></button></span>
-                  <span *ngIf="isgroupadmin" id="spanaddBtn" class="col-sm-1" data-toggle="tooltip" data-placement="top" title="Delete Group"><button (click)="delete_group(group.name)" id="deleteBtn" class="btn btn-primary btn-danger btn-block"><img id="addUserImage" src="../assets/x-icon.png"></button></span>
+                  <span *ngIf="isgroupadmin" id="channelBtn" class="col-sm-2" data-toggle="tooltip" data-placement="top" title="Add Channel"><button id="addchannel" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#add_channel" (click)="adding_channel(group.id)">Add Channel</button></span>
+                  <span *ngIf="isgroupadmin" id="spandeleteBtn" class="col-sm-1" data-toggle="tooltip" data-placement="top" title="Group Users"><button id="addUserBtn" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#user_group" (click)="group_users(group.id,group.users)"><img id="addUserImage" src="../assets/iconperson.png"></button></span>
+                  <span *ngIf="isgroupadmin" id="spanaddBtn" class="col-sm-1" data-toggle="tooltip" data-placement="top" title="Delete Group"><button (click)="delete_group(group.id)" id="deleteBtn" class="btn btn-primary btn-danger btn-block"><img id="addUserImage" src="../assets/x-icon.png"></button></span>
                 </div>
               </div>
               <div class="card-body">
                 <div *ngFor="let channel of group.channels" class="row" style="margin-bottom: 5px;">
                   <span class="col-sm-10" id="channelBtn"><button class='btn btn-info btn-block' (click)="openChannel(channel.name,group.name)" style="padding-bottom: 10px;">{{ channel.name }} </button></span>
-                  <span *ngIf="isgroupadmin" class="col-sm-1" id="spanaddBtn" data-toggle="tooltip" data-placement="top" title="Channel Users"><button id="addUserBtn" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#user_channel" (click)="channel_users(channel.name, channel.users,group.name)"><img id="addUserImage" src="../assets/iconperson.png"></button></span>
-                  <span *ngIf="isgroupadmin" class="col-sm-1" id="spandeleteBtn"data-toggle="tooltip" data-placement="top" title="Delete Channels"><button id="deleteBtn" class="btn btn-primary btn-danger btn-block" (click)="delete_channel(channel.name)"><img id="addUserImage" src="../assets/x-icon.png"></button></span>
+                  <span *ngIf="isgroupadmin" class="col-sm-1" id="spanaddBtn" data-toggle="tooltip" data-placement="top" title="Channel Users"><button id="addUserBtn" type="button" class="btn btn-primary btn-success btn-block" data-toggle="modal" data-target="#user_channel" (click)="channel_users(channel.id, channel.users,group.id)"><img id="addUserImage" src="../assets/iconperson.png"></button></span>
+                  <span *ngIf="isgroupadmin" class="col-sm-1" id="spandeleteBtn"data-toggle="tooltip" data-placement="top" title="Delete Channels"><button id="deleteBtn" class="btn btn-primary btn-danger btn-block" (click)="delete_channel(channel.id,channel.name)"><img id="addUserImage" src="../assets/x-icon.png"></button></span>
                 </div>
               </div>
             </div>
@@ -67,9 +67,9 @@
               <span class="col-sm-12">
                   <h5>{{users.name}}</h5>
               </span>
-              <button *ngIf="issuperadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user(users.name)" data-toggle="tooltip" data-placement="top" title="Delete Users"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
+              <button *ngIf="issuperadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user(users._id)" data-toggle="tooltip" data-placement="top" title="Delete Users"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
               <span *ngIf="isgroupadmin" data-toggle="modal" data-target="#edit_user">
-                <button id="usereditBtn" class="btn btn-primary btn-secondary" (click)="edit_user(users.name,users.email,users.roles)" data-toggle="tooltip" data-placement="top" title="Edit Users"><img id="userdeleteImg" src="../assets/icon-edit.png"></button>
+                <button id="usereditBtn" class="btn btn-primary btn-secondary" (click)="edit_user(users)" data-toggle="tooltip" data-placement="top" title="Edit Users"><img id="userdeleteImg" src="../assets/icon-edit.png"></button>
               </span>
             </div>
           </div>
@@ -97,6 +97,8 @@
                     <input type="email" [(ngModel)]='useremail' name="email"><br>
                   </div>
                   <div class= "col-sm-6">
+                    Password:<br>
+                    <input type="password" [(ngModel)]='userpassword' name="password"><br>
                     Roles:<br>
                     <select name="roles" [(ngModel)]='userrole'>
                       <option value="User">User</option>
@@ -133,6 +135,8 @@
                     <input type="email" [(ngModel)]='edituseremail' name="email"><br>
                   </div>
                   <div class= "col-sm-6">
+                    Password:<br>
+                    <input type="password" [(ngModel)]='edituserpassword' name="password"><br>
                     Roles:<br>
                     <select name="roles" [(ngModel)]='edituserrole'>
                       <option value="User">User</option>
@@ -241,7 +245,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
         <div class="modal-header" id="cardhead">
-          <h5 class="modal-title" id="user_groupTitle">User's of Channel</h5>
+          <h5 class="modal-title" id="user_groupTitle">User's of group: {{group_id}}</h5>
         </div>
         <div class="modal-body">
           <div class="conatiner-fluid" id="useraddDiv">
