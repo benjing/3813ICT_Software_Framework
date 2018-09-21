@@ -3,17 +3,26 @@ module.exports = function(app,io){
     //respond to connection
     io.on('connection',(socket) =>{
         console.log('user connected');
-        io.emit("user has joined the channel")
+        var channelinfo = JSON.parse(socket.handshake.query.channel)
+        // var user = JSON.parse(socket.handshake.query)
+        console.log(channelinfo)
+        var channel = channelinfo.channel
+        var user = channelinfo.user
+        console.log(channel)
+        socket.join(channel);
+        io.to(channel).emit('message',{type: 'message',text:{name:"Server",message:"User "+user+" has joined the channel",image:false}})
         //respond to disconnection
         socket.on('disconnect',function(){
-            io.emit("user has left the channel")
+            io.to(channel).emit('message',{type: 'message',text:{name:"Server",message:"User "+user+" has left the channel",image:false}})
+            socket.leave(channel)
             console.log('user disconnection');
         });
         //respond to getting a message
         socket.on('add-message',(message) =>{
             //broacast messaeg to all users connected on this socket.
             console.log(message)
-            io.emit('message',{type: 'message',text:message});
+            console.log(channel)
+            io.to(channel).emit('message',{type: 'message',text:message});
 
         });
     });

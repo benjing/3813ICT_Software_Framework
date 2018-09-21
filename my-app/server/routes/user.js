@@ -9,7 +9,7 @@ module.exports = function(app,db,fs){
         const collection = db.collection("tests");
         collection.find({}).toArray(function(err, users) {
             assert.equal(err, null);
-            console.log("Found the following records: "+users);
+            console.log("Found the following users: "+users);
             res.send({users})
         });
     });
@@ -26,7 +26,7 @@ module.exports = function(app,db,fs){
             if (users == ""||users == null){
                 console.log("hello")
                 collection.insertOne(
-                    {name : req.body.userOBJ.name, password:req.body.userOBJ.password, email:req.body.userOBJ.email, roles:[req.body.userOBJ.roles]}
+                    {name : req.body.userOBJ.name, password:req.body.userOBJ.password,image:req.body.userOBJ.image, email:req.body.userOBJ.email, roles:[req.body.userOBJ.roles]}
                     )
                 res.send({"success":true})
             }else{

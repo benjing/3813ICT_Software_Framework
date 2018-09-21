@@ -9,7 +9,7 @@ module.exports = function(app,db,fs){
         const collection = db.collection("tests");
         collection.find({name:user,password:pass}).toArray(function(err, users) {
             assert.equal(err, null);
-            console.log("Found the following records: "+ users );
+            console.log("Found the following users: "+ users );
             if (users == ""||users == null){
                 res.send({"users":"","success":false})
             }else{

@@ -8,7 +8,7 @@ module.exports = function(app,db,fs){
         const collection = db.collection("channels");
         collection.find({}).toArray(function(err, channels) {
             assert.equal(err, null);
-            console.log("Found the following records: "+channels);
+            console.log("Found the following channels: "+channels);
             res.send({channels})
         });
     });

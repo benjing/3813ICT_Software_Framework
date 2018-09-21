@@ -3,10 +3,12 @@ const app = express();
 const path = require('path');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const formidable = require('formidable');
 const bodyParser = require("body-parser");
 app.use (bodyParser.json());
 app.use (bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname , '../dist/my-app')));
+app.use('/images',express.static(path.join(__dirname , './userimages')));
 const fs = require('fs');
 
 
@@ -22,6 +24,7 @@ MongoClient.connect(url,{poolsize:10},function(err, client){
     const dbName = 'test';
     const db = client.db(dbName);
     // const db = mongoose.connection;
+    require('./imageuploads.js')(app,formidable);
     require('./routes/auth.js')(app,db,fs);
     require('./routes/user.js')(app,db,fs);
     require('./routes/group.js')(app,db,fs);

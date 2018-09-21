@@ -184,7 +184,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<button id=\"backBtn\" class=\"btn btn-success btn-primary\" (click)=\"back()\">Go Back</button>\r\n<div class=\"row\" style=\"margin-right: 0px;\">\r\n  <div class=\"col-sm-10\" id=\"groups\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <h2>Channel: {{channel_name}}</h2>\r\n      </div>\r\n      <div class=\"card-body\" id=\"cardbody\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12\">\r\n            <div *ngFor=\"let message of message_list\">\r\n              <span><p>{{message.name}} : </p></span>\r\n              <span><p>{{message.message}}</p></span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-footer\">\r\n        <div>\r\n          <form>\r\n            Message:\r\n            <input [(ngModel)]='message' name=\"message\" id=\"message\">\r\n            <button class=\"btn btn-primary btn-success\" (click)=\"sendMessage()\">Send Message</button>\r\n          </form>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-sm-2\" id=\"users\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n          <div class=\"col-sm-12 text-center\">\r\n              <h3>Users:</h3>\r\n          </div>\r\n          <div class=\"col-sm-12\">\r\n            <span data-toggle=\"modal\" data-target=\"#add_user_channel\">\r\n                <button type=\"button\" class=\"btn btn-block btn-success\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add user\">Add a User</button>\r\n            </span>\r\n          </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"userbody\">\r\n        <div class=\"card\" *ngFor=\"let users of c_user_list\" style=\"margin-bottom: 5px;\">\r\n          <div class=\"card-body\">\r\n            <div class=\"row\">\r\n              <span class=\"col-sm-12\">\r\n                  <h5>{{users.name}}</h5>\r\n              </span>\r\n              <button *ngIf=\"issuperadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_channel(users.name)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Users\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n<div class=\"modal fade\" id=\"add_user_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_user_channelTitle\" aria-hidden=\"true\">\r\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n        <form (submit)=\"addUserChannel($event)\">\r\n          <div class=\"modal-header\" id=\"cardhead\">\r\n            <h5 class=\"modal-title\" id=\"add_user_channelTitle\">Add Group User</h5>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <div class=\"row\">\r\n              <div class= \"col-sm-12\">\r\n                User's Name:<br>\r\n                <input type=\"text\" [(ngModel)]='channelusername' name=\"channelusername\"><br>\r\n                <div *ngIf=\"cunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter valid user name</h4></div>\r\n                <div *ngIf=\"cuserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\r\n            <button type=\"submit\" class=\"btn btn-primary\">Add User</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n"
+module.exports = "<button id=\"backBtn\" class=\"btn btn-success btn-primary\" (click)=\"back()\">Go Back</button>\r\n<div class=\"row\" style=\"margin-right: 0px;\">\r\n  <div class=\"col-sm-10\" id=\"groups\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <h2>Channel: {{channel_name}}</h2>\r\n      </div>\r\n      <div class=\"card-body\" id=\"cardbody\">\r\n        <div class=\"row\" id=\"messagescroll\">\r\n          <div class=\"col-sm-12\">\r\n            <div class=\"row\" *ngFor=\"let message of message_list\">\r\n              <div class=\"col-sm-1 text-center\">\r\n                <span class=\"col.sm-12\"><img id=\"userimg\" src={{message.userimage}} onerror=\"this.src='images/defualt.png'\"></span>\r\n                <span id=\"username\" class=\"col-sm-12\"><p>{{message.name}} </p></span>\r\n              </div>\r\n              <div class=\"col-sm-11\">\r\n                <span *ngIf='message.image' class=\"col-sm-12\"><p>{{message.message}}</p></span>\r\n                <span *ngIf='!message.image'class=\"col-sm-12\"><p>{{message.message}}</p></span>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-footer\">\r\n        <div>\r\n          <form>\r\n            Message:\r\n            <input [(ngModel)]='message' name=\"message\" id=\"message\">\r\n            <button class=\"btn btn-primary btn-success\" (click)=\"sendMessage()\">Send Message</button>\r\n          </form>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"col-sm-2\" id=\"users\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n          <div class=\"col-sm-12 text-center\">\r\n              <h3>Users:</h3>\r\n          </div>\r\n          <div class=\"col-sm-12\">\r\n            <span data-toggle=\"modal\" data-target=\"#add_user_channel\">\r\n                <button type=\"button\" class=\"btn btn-block btn-success\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add user\">Add a User</button>\r\n            </span>\r\n          </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"userbody\">\r\n        <div class=\"card\" *ngFor=\"let users of c_user_list\" style=\"margin-bottom: 5px;\">\r\n          <div class=\"card-body\">\r\n            <div class=\"row\">\r\n              <span class=\"col-sm-12\">\r\n                  <h5>{{users.name}}</h5>\r\n              </span>\r\n              <button *ngIf=\"issuperadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_channel(users._id,users.name)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Users\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n<div class=\"modal fade\" id=\"add_user_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_user_channelTitle\" aria-hidden=\"true\">\r\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n        <form (submit)=\"addUserChannel($event)\">\r\n          <div class=\"modal-header\" id=\"cardhead\">\r\n            <h5 class=\"modal-title\" id=\"add_user_channelTitle\">Add Group User</h5>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <div class=\"row\">\r\n              <div class= \"col-sm-12\">\r\n                User's Name:<br>\r\n                <input type=\"text\" [(ngModel)]='channelusername' name=\"channelusername\"><br>\r\n                <div *ngIf=\"cunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter valid user name</h4></div>\r\n                <div *ngIf=\"cuserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>\r\n            <button type=\"submit\" class=\"btn btn-primary\">Add User</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n"
 
 /***/ }),
 
@@ -233,6 +233,8 @@ var ChannelComponent = /** @class */ (function () {
         this.user_list = [];
         this.c_user_list = [];
         this.channel_name = localStorage.getItem("channel_name");
+        this.channel_id = localStorage.getItem("channel_id");
+        this.imagepath = '';
     }
     //this is on load
     ChannelComponent.prototype.ngOnInit = function () {
@@ -249,11 +251,16 @@ var ChannelComponent = /** @class */ (function () {
         else {
             //gets the username from local storage
             this.username = localStorage.getItem('username');
+            console.log(this.channel_id);
+            // this.socket.join({user:this.username,channel:this.channel_id});
             console.log("session started for: " + this.username);
-            this.connection = this.socket.getMessages().subscribe(function (message) {
+            this.connection = this.socket.getMessages({ channel: this.channel_id, user: this.username }).subscribe(function (message) {
                 var result = message;
                 console.log(result);
-                _this.message_list.push(message);
+                _this.message_list.push(message.text);
+                var element = document.getElementById("cardbody");
+                var scroll = document.getElementById("messagescroll");
+                element.scrollTop = scroll.scrollHeight;
                 _this.message = '';
             });
         }
@@ -278,7 +285,7 @@ var ChannelComponent = /** @class */ (function () {
     //this sends a request to the server to get all channels
     ChannelComponent.prototype.get_channel = function () {
         var _this = this;
-        this.fs.get_channel().subscribe(function (channel) {
+        this.mongo.get_channels().subscribe(function (channel) {
             console.log("getting users");
             console.log(channel);
             for (var i = 0; i < channel.channels.length; i++) {
@@ -291,19 +298,37 @@ var ChannelComponent = /** @class */ (function () {
     };
     // this makes a message list
     ChannelComponent.prototype.make_lists = function (channel) {
+        var _this = this;
         this.channel = channel;
         this.message_list = channel.messages;
-        for (var i = 0; i < channel.users.length; i++) {
-            this.c_user_list.push({ name: channel.users[i] });
-        }
-        console.log(this.channel);
-        console.log(this.c_user_list);
-        console.log(this.message_list);
+        this.mongo.get_users().subscribe(function (users) {
+            console.log(users.users);
+            for (var i = 0; i < channel.users.length; i++) {
+                for (var j = 0; j < users.users.length; j++) {
+                    if (channel.users[i] == users.users[j].name) {
+                        _this.c_user_list.push(users.users[j]);
+                    }
+                }
+            }
+            console.log(_this.channel);
+            console.log(_this.c_user_list);
+            console.log(_this.message_list);
+        });
     };
     ChannelComponent.prototype.sendMessage = function () {
         console.log(this.message);
+        for (var i = 0; i < this.user_list.length; i++) {
+            if (this.user_list[i].name == this.username) {
+                this.userimage = this.user_list[i].image;
+            }
+        }
         //send a chat message
-        this.socket.sendMessage({ name: this.username, message: this.message });
+        if (this.imagepath == "" || this.imagepath == null) {
+            this.socket.sendMessage({ name: this.username, userimage: this.userimage, message: this.message, image: false });
+        }
+        else {
+            this.socket.sendMessage({ name: this.username, userimage: this.userimage, message: this.imagepath, image: true });
+        }
     };
     ChannelComponent.prototype.ngOnDestroy = function () {
         if (this.connection) {
@@ -322,14 +347,17 @@ var ChannelComponent = /** @class */ (function () {
         else {
             if (this.user_name_list.includes(this.channelusername)) {
                 console.log("Adding user to " + this.channelusername + " group");
-                this.fs.edit_channel(this.channelusername, localStorage.getItem("channel_name")).subscribe(function (channels) {
+                this.mongo.edit_channel(this.channelusername, localStorage.getItem("channel_id")).subscribe(function (channels) {
                     console.log(channels);
-                    _this.c_user_list = [];
-                    _this.get_channel();
-                    _this.fs.edit_group(_this.channelusername, localStorage.getItem("group_name")).subscribe(function (groups) {
+                    _this.mongo.edit_group(_this.channelusername, localStorage.getItem("group_id")).subscribe(function (groups) {
+                        for (var i = 0; i < _this.user_list.length; i++) {
+                            if (_this.user_list[i].name == _this.channelusername) {
+                                _this.c_user_list.push(_this.user_list[i]);
+                            }
+                        }
+                        _this.channelusername = '';
                     });
                 });
-                this.channelusername = '';
             }
             else {
                 this.cuserfalse = true;
@@ -344,10 +372,11 @@ var ChannelComponent = /** @class */ (function () {
     // sends a request to the server to get all users then puts them in a list.
     ChannelComponent.prototype.getUsers = function () {
         var _this = this;
-        this.fs.get_users().subscribe(function (users) {
+        this.mongo.get_users().subscribe(function (users) {
             console.log("getting users");
-            console.log(users);
+            console.log(users.users);
             _this.user_list = users.users;
+            console.log(_this.user_list);
             _this.user_name_list = [];
             for (var i = 0; i < users.users.length; i++) {
                 _this.user_name_list.push(users.users[i].name);
@@ -355,13 +384,13 @@ var ChannelComponent = /** @class */ (function () {
         });
     };
     //this sends a request to the server to delete a user from a channel
-    ChannelComponent.prototype.delete_user_channel = function (users) {
+    ChannelComponent.prototype.delete_user_channel = function (usersid, usersname) {
         var _this = this;
-        console.log("deleteing " + users + " from channel " + localStorage.getItem("channel_name"));
-        this.fs.delete_channel_user(localStorage.getItem("channel_name"), users).subscribe(function (channels) {
+        console.log("deleteing " + usersname + " from channel " + localStorage.getItem("channel_name"));
+        this.mongo.delete_channel_user(this.channel_id, usersname).subscribe(function (channels) {
             console.log(channels);
             for (var i = 0; i < _this.c_user_list.length; i++) {
-                if (_this.c_user_list[i].name == users) {
+                if (_this.c_user_list[i]._id == usersid) {
                     _this.c_user_list.splice(i, 1);
                 }
             }
@@ -522,7 +551,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<form (submit)=\"logoutUser($event)\">\r\n  <button id=\"logoutBtn\" class=\"btn btn-success btn-primary\" type=\"submit\">Log Out</button>\r\n</form>\r\n<div class=\"row\" style=\"margin-right: 0px;\">\r\n  <div class=\"col-sm-10\" id=\"groups\">\r\n    <div class=\"card\" id=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-10\">\r\n              <h2>Groups:</h2>\r\n          </div>\r\n          <div class=\"col-sm-2\">\r\n              <span data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add Groups\">\r\n                  <button *ngIf=\"isgroupadmin\" type=\"button\" class=\"btn btn-success btn-primary\" data-toggle=\"modal\" data-target=\"#add_group\">Add a group</button>\r\n                </span>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"cardbody\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12\">\r\n            <div class='card' *ngFor=\"let group of combined_list\">\r\n              <div class=\"card-header\" id=\"cardhead\">\r\n                <div class=\"row\">\r\n                  <div class=\"col-sm-8\">\r\n                    <h3>\r\n                          {{group.name}}\r\n                    </h3>\r\n                  </div>\r\n                  <span *ngIf=\"isgroupadmin\" id=\"channelBtn\" class=\"col-sm-2\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add Channel\"><button id=\"addchannel\" type=\"button\" class=\"btn btn-primary btn-success btn-block\" data-toggle=\"modal\" data-target=\"#add_channel\" (click)=\"adding_channel(group.id)\">Add Channel</button></span>\r\n                  <span *ngIf=\"isgroupadmin\" id=\"spandeleteBtn\" class=\"col-sm-1\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Group Users\"><button id=\"addUserBtn\" type=\"button\" class=\"btn btn-primary btn-success btn-block\" data-toggle=\"modal\" data-target=\"#user_group\" (click)=\"group_users(group.id,group.users)\"><img id=\"addUserImage\" src=\"../assets/iconperson.png\"></button></span>\r\n                  <span *ngIf=\"isgroupadmin\" id=\"spanaddBtn\" class=\"col-sm-1\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Group\"><button (click)=\"delete_group(group.id)\" id=\"deleteBtn\" class=\"btn btn-primary btn-danger btn-block\"><img id=\"addUserImage\" src=\"../assets/x-icon.png\"></button></span>\r\n                </div>\r\n              </div>\r\n              <div class=\"card-body\">\r\n                <div *ngFor=\"let channel of group.channels\" class=\"row\" style=\"margin-bottom: 5px;\">\r\n                  <span class=\"col-sm-10\" id=\"channelBtn\"><button class='btn btn-info btn-block' (click)=\"openChannel(channel.name,group.name)\" style=\"padding-bottom: 10px;\">{{ channel.name }} </button></span>\r\n                  <span *ngIf=\"isgroupadmin\" class=\"col-sm-1\" id=\"spanaddBtn\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Channel Users\"><button id=\"addUserBtn\" type=\"button\" class=\"btn btn-primary btn-success btn-block\" data-toggle=\"modal\" data-target=\"#user_channel\" (click)=\"channel_users(channel.id, channel.users,group.id)\"><img id=\"addUserImage\" src=\"../assets/iconperson.png\"></button></span>\r\n                  <span *ngIf=\"isgroupadmin\" class=\"col-sm-1\" id=\"spandeleteBtn\"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Channels\"><button id=\"deleteBtn\" class=\"btn btn-primary btn-danger btn-block\" (click)=\"delete_channel(channel.id,channel.name)\"><img id=\"addUserImage\" src=\"../assets/x-icon.png\"></button></span>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"col-sm-2\" id=\"users\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12 text-center\">\r\n              <h3>Users:</h3>\r\n          </div>\r\n          <div class=\"col-sm-12\">\r\n              <span *ngIf=\"isgroupadmin\" data-toggle=\"modal\" data-target=\"#add_user\">\r\n                  <button type=\"button\" class=\"btn btn-block btn-success btn-primary\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add user\">Add a User</button>\r\n              </span>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"userbody\">\r\n        <div class=\"card\" *ngFor=\"let users of user_list\" style=\"margin-bottom: 5px;\">\r\n          <div class=\"card-body\">\r\n            <div class=\"row\">\r\n              <span class=\"col-sm-12\">\r\n                  <h5>{{users.name}}</h5>\r\n              </span>\r\n              <button *ngIf=\"issuperadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user(users._id)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Users\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n              <span *ngIf=\"isgroupadmin\" data-toggle=\"modal\" data-target=\"#edit_user\">\r\n                <button id=\"usereditBtn\" class=\"btn btn-primary btn-secondary\" (click)=\"edit_user(users)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit Users\"><img id=\"userdeleteImg\" src=\"../assets/icon-edit.png\"></button>\r\n              </span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n\r\n<div class=\"modal fade\" id=\"add_user\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_userTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <form (submit)=\"addUser($event)\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"add_userTitle\">Add User</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n                <div class=\"row\">\r\n                  <div class= \"col-sm-6\">\r\n                    Username:<br>\r\n                    <input type=\"text\" [(ngModel)]='username' name=\"username\" required><br>\r\n                    Email:<br>\r\n                    <input type=\"email\" [(ngModel)]='useremail' name=\"email\"><br>\r\n                  </div>\r\n                  <div class= \"col-sm-6\">\r\n                    Password:<br>\r\n                    <input type=\"password\" [(ngModel)]='userpassword' name=\"password\"><br>\r\n                    Roles:<br>\r\n                    <select name=\"roles\" [(ngModel)]='userrole'>\r\n                      <option value=\"User\">User</option>\r\n                      <option value=\"Group_User\">Group_User</option>\r\n                      <option *ngIf=\"issuperadmin\" value=\"Super_User\">Super_User</option>\r\n                    </select><br>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"unamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user name</h4></div>\r\n                <div *ngIf=\"uemailfalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user email</h4></div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n              <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"ureset()\">Cancel</button>\r\n              <button type=\"submit\" class=\"btn btn-success btn-primary\">Add User</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"edit_user\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit_userTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <form (submit)=\"editUser($event)\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"edit_userTitle\">Add User</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n                <div class=\"row\">\r\n                  <div class= \"col-sm-6\">\r\n                    Username:<br>\r\n                    <input type=\"text\" [(ngModel)]='editusername' name=\"username\"><br>\r\n                    Email:<br>\r\n                    <input type=\"email\" [(ngModel)]='edituseremail' name=\"email\"><br>\r\n                  </div>\r\n                  <div class= \"col-sm-6\">\r\n                    Password:<br>\r\n                    <input type=\"password\" [(ngModel)]='edituserpassword' name=\"password\"><br>\r\n                    Roles:<br>\r\n                    <select name=\"roles\" [(ngModel)]='edituserrole'>\r\n                      <option value=\"User\">User</option>\r\n                      <option value=\"Group_User\">Group_User</option>\r\n                      <option *ngIf=\"issuperadmin\" value=\"Super_User\">Super_User</option>\r\n                    </select><br>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"eunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user name</h4></div>\r\n                <div *ngIf=\"euemailfalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user email</h4></div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n              <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"eureset()\">Cancel</button>\r\n              <button type=\"submit\" class=\"btn btn-success btn-primary\">Add User</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"add_group\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_groupTitle\" aria-hidden=\"true\">\r\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n        <form (submit)=\"addGroup($event)\">\r\n          <div class=\"modal-header\" id=\"cardhead\">\r\n            <h5 class=\"modal-title\" id=\"add_groupTitle\">Add Group</h5>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <div class=\"row\">\r\n              <div class= \"col-sm-12\">\r\n                Group Name:<br>\r\n                <input type=\"text\" [(ngModel)]='groupname' name=\"groupname\"><br>\r\n                <div *ngIf=\"gnamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a group name</h4></div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"greset()\">Cancel</button>\r\n            <button type=\"submit\" class=\"btn btn-success btn-primary\">Add Group</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n\r\n<div class=\"modal fade\" id=\"add_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_channelTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <form (submit)=\"addChannel($event)\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"add_channelTitle\">Add Channel</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class=\"row\">\r\n            <div class= \"col-sm-12\">\r\n              Channel Name:<br>\r\n              <input type=\"text\" [(ngModel)]='channelname' name=\"channelname\"><br>\r\n              <div *ngIf=\"cnamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a channel name</h4></div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n          <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"creset()\">Cancel</button>\r\n          <button type=\"submit\" class=\"btn btn-success btn-primary\" >Add Channel</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"user_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user_channelTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"user_channelTitle\">User's of Channel</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class=\"conatiner-fluid\" id=\"useraddDiv\">\r\n            <form (submit)=\"addUserChannel($event)\" class=\"text-center\">\r\n                <input type=\"text\" [(ngModel)]='channelusername' name=\"channeusername\">\r\n              <span><button id=\"useraddBtn\" type=\"submit\" class=\"btn btn-success btn-primary\">Add User</button></span>\r\n            </form>\r\n            <div *ngIf=\"cunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter valid user name</h4></div>\r\n            <div *ngIf=\"cuserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n          </div>\r\n          <div class=\"card\" *ngFor=\"let users of c_user_list\" style=\"margin-bottom: 5px;\">\r\n            <div class=\"card-body\">\r\n              <div class=\"row\">\r\n                <span class=\"col-sm-12\">\r\n                    <h5>{{users}}</h5>\r\n                </span>\r\n                <button *ngIf=\"isgroupadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_channel(users)\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n              </div>\r\n            </div>\r\n          </div>\r\n      </div>\r\n      <div class=\"modal-footer\">\r\n        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"cureset()\">Cancel</button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"user_group\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user_groupTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"user_groupTitle\">User's of group: {{group_id}}</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class=\"conatiner-fluid\" id=\"useraddDiv\">\r\n            <form (submit)=\"addUserGroup($event)\" class=\"text-center\">\r\n              <input type=\"text\" [(ngModel)]='groupusername' name=\"groupusername\">\r\n              <span><button id=\"useraddBtn\" type=\"submit\" class=\"btn btn-success btn-primary\">Add User</button></span>\r\n            </form>\r\n            <div *ngIf=\"gunamefalse\" id=\"errormessage\"><h4>invalid Input! Please enter valid user name</h4></div>\r\n            <div *ngIf=\"guserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n          </div>\r\n          <div id=\"usercard\">\r\n            <div class=\"card\" *ngFor=\"let users of g_user_list\" style=\"margin-bottom: 5px;\">\r\n              <div class=\"card-body\">\r\n                <div class=\"row\">\r\n                  <span class=\"col-sm-12\">\r\n                    <h5>{{users}}</h5>\r\n                  </span>\r\n                  <button *ngIf=\"isgroupadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_group(users)\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n          <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"gureset()\">Cancel</button>\r\n        </div>\r\n    </div>\r\n  </div>\r\n</div>"
+module.exports = "<form (submit)=\"logoutUser($event)\">\r\n  <button id=\"logoutBtn\" class=\"btn btn-success btn-primary\" type=\"submit\">Log Out</button>\r\n</form>\r\n<div class=\"row\" style=\"margin-right: 0px;\">\r\n  <div class=\"col-sm-10\" id=\"groups\">\r\n    <div class=\"card\" id=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-10\">\r\n              <h2>Groups:</h2>\r\n          </div>\r\n          <div class=\"col-sm-2\">\r\n              <span data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add Groups\">\r\n                  <button *ngIf=\"isgroupadmin\" type=\"button\" class=\"btn btn-success btn-primary\" data-toggle=\"modal\" data-target=\"#add_group\">Add a group</button>\r\n                </span>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"cardbody\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12\">\r\n            <div class='card' *ngFor=\"let group of combined_list\">\r\n              <div class=\"card-header\" id=\"cardhead\">\r\n                <div class=\"row\">\r\n                  <div class=\"col-sm-8\">\r\n                    <h3>\r\n                          {{group.name}}\r\n                    </h3>\r\n                  </div>\r\n                  <span *ngIf=\"isgroupadmin\" id=\"channelBtn\" class=\"col-sm-2\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add Channel\"><button id=\"addchannel\" type=\"button\" class=\"btn btn-primary btn-success btn-block\" data-toggle=\"modal\" data-target=\"#add_channel\" (click)=\"adding_channel(group.id)\">Add Channel</button></span>\r\n                  <span *ngIf=\"isgroupadmin\" id=\"spandeleteBtn\" class=\"col-sm-1\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Group Users\"><button id=\"addUserBtn\" type=\"button\" class=\"btn btn-primary btn-success btn-block\" data-toggle=\"modal\" data-target=\"#user_group\" (click)=\"group_users(group.id,group.users)\"><img id=\"addUserImage\" src=\"../assets/iconperson.png\"></button></span>\r\n                  <span *ngIf=\"isgroupadmin\" id=\"spanaddBtn\" class=\"col-sm-1\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Group\"><button (click)=\"delete_group(group.id)\" id=\"deleteBtn\" class=\"btn btn-primary btn-danger btn-block\"><img id=\"addUserImage\" src=\"../assets/x-icon.png\"></button></span>\r\n                </div>\r\n              </div>\r\n              <div class=\"card-body\">\r\n                <div *ngFor=\"let channel of group.channels\" class=\"row\" style=\"margin-bottom: 5px;\">\r\n                  <span class=\"col-sm-10\" id=\"channelBtn\"><button class='btn btn-info btn-block' (click)=\"openChannel(channel.name,channel.id,group.id)\" style=\"padding-bottom: 10px;\">{{ channel.name }} </button></span>\r\n                  <span *ngIf=\"isgroupadmin\" class=\"col-sm-1\" id=\"spanaddBtn\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Channel Users\"><button id=\"addUserBtn\" type=\"button\" class=\"btn btn-primary btn-success btn-block\" data-toggle=\"modal\" data-target=\"#user_channel\" (click)=\"channel_users(channel.id, channel.users,group.id)\"><img id=\"addUserImage\" src=\"../assets/iconperson.png\"></button></span>\r\n                  <span *ngIf=\"isgroupadmin\" class=\"col-sm-1\" id=\"spandeleteBtn\"data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Channels\"><button id=\"deleteBtn\" class=\"btn btn-primary btn-danger btn-block\" (click)=\"delete_channel(channel.id,channel.name)\"><img id=\"addUserImage\" src=\"../assets/x-icon.png\"></button></span>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"col-sm-2\" id=\"users\">\r\n    <div class=\"card\">\r\n      <div class=\"card-header\" id=\"cardhead\">\r\n        <div class=\"row\">\r\n          <div class=\"col-sm-12 text-center\">\r\n              <h3>Users:</h3>\r\n          </div>\r\n          <div class=\"col-sm-12\">\r\n              <span *ngIf=\"isgroupadmin\" data-toggle=\"modal\" data-target=\"#add_user\">\r\n                  <button type=\"button\" class=\"btn btn-block btn-success btn-primary\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Add user\">Add a User</button>\r\n              </span>\r\n          </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"card-body\" id=\"userbody\">\r\n        <div class=\"card\" *ngFor=\"let users of user_list\" style=\"margin-bottom: 5px;\">\r\n          <div class=\"card-body\">\r\n            <div class=\"row\">\r\n              <span class=\"col-sm-12\">\r\n                  <h5>{{users.name}}</h5>\r\n              </span>\r\n              <button *ngIf=\"issuperadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user(users._id)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete Users\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n              <span *ngIf=\"isgroupadmin\" data-toggle=\"modal\" data-target=\"#edit_user\">\r\n                <button id=\"usereditBtn\" class=\"btn btn-primary btn-secondary\" (click)=\"edit_user(users)\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit Users\"><img id=\"userdeleteImg\" src=\"../assets/icon-edit.png\"></button>\r\n              </span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n\r\n\r\n<div class=\"modal fade\" id=\"add_user\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_userTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <form >\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"add_userTitle\">Add User</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n                <div class=\"row\">\r\n                  <div class= \"col-sm-6\">\r\n                    Username:<br>\r\n                    <input type=\"text\" class=\"form-control\" [(ngModel)]='username' name=\"username\" required><br>\r\n                    Email:<br>\r\n                    <input type=\"email\" class=\"form-control\" [(ngModel)]='useremail' name=\"email\"><br>\r\n                  </div>\r\n                  <div class= \"col-sm-6\">\r\n                    Password:<br>\r\n                    <input type=\"password\" class=\"form-control\" [(ngModel)]='userpassword' name=\"password\"><br>\r\n                    Roles:<br>\r\n                    <select name=\"roles\" class=\"form-control\" [(ngModel)]='userrole'>\r\n                      <option value=\"User\">User</option>\r\n                      <option value=\"Group_User\">Group_User</option>\r\n                      <option *ngIf=\"issuperadmin\" value=\"Super_User\">Super_User</option>\r\n                    </select><br>\r\n                  </div>\r\n                  <div class=\"col-sm-12\">\r\n                    <br>\r\n                    <input type=\"file\" class=\"form-control\" (change)=\"onFileSelected($event)\" name=uploadfile id=\"uploadfile\">\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"unamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user name</h4></div>\r\n                <div *ngIf=\"uemailfalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user email</h4></div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n              <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"ureset()\">Cancel</button>\r\n              <button type=\"button\" (click)=\"addUser()\" class=\"btn btn-success btn-primary\">Add User</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"edit_user\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"edit_userTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <form (submit)=\"editUser($event)\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"edit_userTitle\">Add User</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n                <div class=\"row\">\r\n                  <div class= \"col-sm-6\">\r\n                    Username:<br>\r\n                    <input type=\"text\" [(ngModel)]='editusername' name=\"username\"><br>\r\n                    Email:<br>\r\n                    <input type=\"email\" [(ngModel)]='edituseremail' name=\"email\"><br>\r\n                  </div>\r\n                  <div class= \"col-sm-6\">\r\n                    Password:<br>\r\n                    <input type=\"password\" [(ngModel)]='edituserpassword' name=\"password\"><br>\r\n                    Roles:<br>\r\n                    <select name=\"roles\" [(ngModel)]='edituserrole'>\r\n                      <option value=\"User\">User</option>\r\n                      <option value=\"Group_User\">Group_User</option>\r\n                      <option *ngIf=\"issuperadmin\" value=\"Super_User\">Super_User</option>\r\n                    </select><br>\r\n                  </div>\r\n                </div>\r\n                <div *ngIf=\"eunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user name</h4></div>\r\n                <div *ngIf=\"euemailfalse\" id=\"errormessage\"><h4>Invalid input! Please enter a user email</h4></div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n              <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"eureset()\">Cancel</button>\r\n              <button type=\"submit\" class=\"btn btn-success btn-primary\">Add User</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"add_group\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_groupTitle\" aria-hidden=\"true\">\r\n    <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n      <div class=\"modal-content\">\r\n        <form (submit)=\"addGroup($event)\">\r\n          <div class=\"modal-header\" id=\"cardhead\">\r\n            <h5 class=\"modal-title\" id=\"add_groupTitle\">Add Group</h5>\r\n          </div>\r\n          <div class=\"modal-body\">\r\n            <div class=\"row\">\r\n              <div class= \"col-sm-12\">\r\n                Group Name:<br>\r\n                <input type=\"text\" [(ngModel)]='groupname' name=\"groupname\"><br>\r\n                <div *ngIf=\"gnamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a group name</h4></div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n          <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"greset()\">Cancel</button>\r\n            <button type=\"submit\" class=\"btn btn-success btn-primary\">Add Group</button>\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"add_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"add_channelTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n      <form (submit)=\"addChannel($event)\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"add_channelTitle\">Add Channel</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class=\"row\">\r\n            <div class= \"col-sm-12\">\r\n              Channel Name:<br>\r\n              <input type=\"text\" [(ngModel)]='channelname' name=\"channelname\"><br>\r\n              <div *ngIf=\"cnamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter a channel name</h4></div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n          <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"creset()\">Cancel</button>\r\n          <button type=\"submit\" class=\"btn btn-success btn-primary\" >Add Channel</button>\r\n        </div>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"user_channel\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user_channelTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"user_channelTitle\">User's of Channel</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class=\"conatiner-fluid\" id=\"useraddDiv\">\r\n            <form (submit)=\"addUserChannel($event)\" class=\"text-center\">\r\n                <input type=\"text\" [(ngModel)]='channelusername' name=\"channeusername\">\r\n              <span><button id=\"useraddBtn\" type=\"submit\" class=\"btn btn-success btn-primary\">Add User</button></span>\r\n            </form>\r\n            <div *ngIf=\"cunamefalse\" id=\"errormessage\"><h4>Invalid input! Please enter valid user name</h4></div>\r\n            <div *ngIf=\"cuserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n          </div>\r\n          <div class=\"card\" *ngFor=\"let users of c_user_list\" style=\"margin-bottom: 5px;\">\r\n            <div class=\"card-body\">\r\n              <div class=\"row\">\r\n                <span class=\"col-sm-12\">\r\n                    <h5>{{users}}</h5>\r\n                </span>\r\n                <button *ngIf=\"isgroupadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_channel(users)\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n              </div>\r\n            </div>\r\n          </div>\r\n      </div>\r\n      <div class=\"modal-footer\">\r\n        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"cureset()\">Cancel</button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"user_group\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"user_groupTitle\" aria-hidden=\"true\">\r\n  <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">\r\n    <div class=\"modal-content\">\r\n        <div class=\"modal-header\" id=\"cardhead\">\r\n          <h5 class=\"modal-title\" id=\"user_groupTitle\">User's of group: {{group_id}}</h5>\r\n        </div>\r\n        <div class=\"modal-body\">\r\n          <div class=\"conatiner-fluid\" id=\"useraddDiv\">\r\n            <form (submit)=\"addUserGroup($event)\" class=\"text-center\">\r\n              <input type=\"text\" [(ngModel)]='groupusername' name=\"groupusername\">\r\n              <span><button id=\"useraddBtn\" type=\"submit\" class=\"btn btn-success btn-primary\">Add User</button></span>\r\n            </form>\r\n            <div *ngIf=\"gunamefalse\" id=\"errormessage\"><h4>invalid Input! Please enter valid user name</h4></div>\r\n            <div *ngIf=\"guserfalse\" id=\"errormessage\"><h4>Unkown User! Please enter valid user name</h4></div>\r\n          </div>\r\n          <div id=\"usercard\">\r\n            <div class=\"card\" *ngFor=\"let users of g_user_list\" style=\"margin-bottom: 5px;\">\r\n              <div class=\"card-body\">\r\n                <div class=\"row\">\r\n                  <span class=\"col-sm-12\">\r\n                    <h5>{{users}}</h5>\r\n                  </span>\r\n                  <button *ngIf=\"isgroupadmin\" id=\"userdeleteBtn\" class=\"btn btn-primary btn-danger\" (click)=\"delete_user_group(users)\"><img id=\"userdeleteImg\" src=\"../assets/x-icon.png\"></button>\r\n                </div>\r\n              </div>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"modal-footer\">\r\n          <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"gureset()\">Cancel</button>\r\n        </div>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -541,6 +570,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _mongo_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../mongo.service */ "./src/app/mongo.service.ts");
 /* harmony import */ var _file_system_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../file-system.service */ "./src/app/file-system.service.ts");
+/* harmony import */ var _imgupload_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../imgupload.service */ "./src/app/imgupload.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -555,12 +585,14 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var GroupComponent = /** @class */ (function () {
-    function GroupComponent(router, form, mongo, fs) {
+    function GroupComponent(router, form, mongo, fs, iup) {
         this.router = router;
         this.form = form;
         this.mongo = mongo;
         this.fs = fs;
+        this.iup = iup;
         this.isgroupadmin = false;
         this.issuperadmin = false;
         this.unamefalse = false;
@@ -577,6 +609,8 @@ var GroupComponent = /** @class */ (function () {
         this.useremail = '';
         this.userpassword = '';
         this.userrole = 'User';
+        this.user_selectedfile = null;
+        this.userimgpath = '';
     }
     GroupComponent.prototype.ngOnInit = function () {
         //does these on page load.
@@ -604,65 +638,130 @@ var GroupComponent = /** @class */ (function () {
         this.router.navigateByUrl('/login');
     };
     //sets the channel clicked on and sends you to the channel page
-    GroupComponent.prototype.openChannel = function (channel, group) {
+    GroupComponent.prototype.openChannel = function (channel, channelid, groupid) {
         localStorage.setItem("channel_name", channel);
-        localStorage.setItem("group_name", group);
+        localStorage.setItem("channel_id", channelid);
+        localStorage.setItem("group_id", groupid);
         this.router.navigateByUrl('/channel');
     };
+    GroupComponent.prototype.onFileSelected = function (event) {
+        console.log(event);
+        this.user_selectedfile = event.target.files[0];
+    };
     //add a user by sending object to fileservice that will send that data to server. checks if name and email is blank.
-    GroupComponent.prototype.addUser = function (event) {
+    GroupComponent.prototype.addUser = function () {
         var _this = this;
-        event.preventDefault();
-        this.ureset();
-        console.log("adding user");
-        if (this.username == "" || this.username == null) {
-            if (this.useremail == "" || this.useremail == null) {
+        if (this.user_selectedfile == null) {
+            this.ureset();
+            console.log("adding user");
+            if (this.username == "" || this.username == null) {
+                if (this.useremail == "" || this.useremail == null) {
+                    this.uemailfalse = true;
+                }
+                this.unamefalse = true;
+            }
+            else if (this.useremail == "" || this.useremail == null) {
                 this.uemailfalse = true;
             }
-            this.unamefalse = true;
-        }
-        else if (this.useremail == "" || this.useremail == null) {
-            this.uemailfalse = true;
+            else {
+                if (this.userrole == "Super_User") {
+                    this.userroles = ["User", "Group_User", this.userrole];
+                    this.userOBJ = { name: this.username, password: this.userpassword, image: '', email: this.useremail, roles: this.userroles };
+                    this.mongo.add_user(this.userOBJ).subscribe(function (users) {
+                        if (users.success == false) {
+                            alert("user already exists");
+                        }
+                        else {
+                            _this.getUsers();
+                            _this.clearUserData();
+                        }
+                    });
+                }
+                else if (this.userrole == "Group_User") {
+                    this.userroles = ["User", this.userrole];
+                    this.userOBJ = { name: this.username, password: this.userpassword, image: '', email: this.useremail, roles: this.userroles };
+                    this.mongo.add_user(this.userOBJ).subscribe(function (users) {
+                        if (users.success == false) {
+                            alert("user already exists");
+                        }
+                        else {
+                            _this.getUsers();
+                            _this.clearUserData();
+                        }
+                    });
+                }
+                else {
+                    this.userOBJ = { name: this.username, password: this.userpassword, image: '', email: this.useremail, roles: [this.userrole] };
+                    this.mongo.add_user(this.userOBJ).subscribe(function (users) {
+                        if (users.success == false) {
+                            alert("user already exists");
+                        }
+                        else {
+                            _this.getUsers();
+                            _this.clearUserData();
+                        }
+                    });
+                }
+            }
         }
         else {
-            if (this.userrole == "Super_User") {
-                this.userroles = ["User", "Group_User", this.userrole];
-                this.userOBJ = { name: this.username, password: this.userpassword, email: this.useremail, roles: this.userroles };
-                this.mongo.add_user(this.userOBJ).subscribe(function (users) {
-                    if (users.success == false) {
-                        alert("user already exists");
+            var fd = new FormData();
+            fd.append('image', this.user_selectedfile, this.user_selectedfile.name);
+            this.iup.imgupload(fd).subscribe(function (res) {
+                _this.userimgpath = res.data.filename;
+                console.log(res.data.filename + ',' + res.data.size);
+                _this.ureset();
+                console.log("adding user");
+                if (_this.username == "" || _this.username == null) {
+                    if (_this.useremail == "" || _this.useremail == null) {
+                        _this.uemailfalse = true;
+                    }
+                    _this.unamefalse = true;
+                }
+                else if (_this.useremail == "" || _this.useremail == null) {
+                    _this.uemailfalse = true;
+                }
+                else {
+                    if (_this.userrole == "Super_User") {
+                        _this.userroles = ["User", "Group_User", _this.userrole];
+                        _this.userOBJ = { name: _this.username, password: _this.userpassword, image: 'images/' + _this.userimgpath, email: _this.useremail, roles: _this.userroles };
+                        _this.mongo.add_user(_this.userOBJ).subscribe(function (users) {
+                            if (users.success == false) {
+                                alert("user already exists");
+                            }
+                            else {
+                                _this.getUsers();
+                                _this.clearUserData();
+                            }
+                        });
+                    }
+                    else if (_this.userrole == "Group_User") {
+                        _this.userroles = ["User", _this.userrole];
+                        _this.userOBJ = { name: _this.username, password: _this.userpassword, image: 'images/' + _this.userimgpath, email: _this.useremail, roles: _this.userroles };
+                        _this.mongo.add_user(_this.userOBJ).subscribe(function (users) {
+                            if (users.success == false) {
+                                alert("user already exists");
+                            }
+                            else {
+                                _this.getUsers();
+                                _this.clearUserData();
+                            }
+                        });
                     }
                     else {
-                        _this.getUsers();
-                        _this.clearUserData();
+                        _this.userOBJ = { name: _this.username, password: _this.userpassword, image: 'images/' + _this.userimgpath, email: _this.useremail, roles: [_this.userrole] };
+                        _this.mongo.add_user(_this.userOBJ).subscribe(function (users) {
+                            if (users.success == false) {
+                                alert("user already exists");
+                            }
+                            else {
+                                _this.getUsers();
+                                _this.clearUserData();
+                            }
+                        });
                     }
-                });
-            }
-            else if (this.userrole == "Group_User") {
-                this.userroles = ["User", this.userrole];
-                this.userOBJ = { name: this.username, password: this.userpassword, email: this.useremail, roles: this.userroles };
-                this.mongo.add_user(this.userOBJ).subscribe(function (users) {
-                    if (users.success == false) {
-                        alert("user already exists");
-                    }
-                    else {
-                        _this.getUsers();
-                        _this.clearUserData();
-                    }
-                });
-            }
-            else {
-                this.userOBJ = { name: this.username, password: this.userpassword, email: this.useremail, roles: [this.userrole] };
-                this.mongo.add_user(this.userOBJ).subscribe(function (users) {
-                    if (users.success == false) {
-                        alert("user already exists");
-                    }
-                    else {
-                        _this.getUsers();
-                        _this.clearUserData();
-                    }
-                });
-            }
+                }
+            });
         }
     };
     //add a group, checks if the name is blank then sends request to server.
@@ -693,6 +792,7 @@ var GroupComponent = /** @class */ (function () {
             console.log("getting users");
             console.log(users.users);
             _this.user_list = users.users;
+            console.log(_this.user_list);
             _this.user_name_list = [];
             for (var i = 0; i < users.users.length; i++) {
                 console.log("users are: " + users.users[i].name);
@@ -997,9 +1097,52 @@ var GroupComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./group.component.html */ "./src/app/group/group.component.html"),
             styles: [__webpack_require__(/*! ./group.component.css */ "./src/app/group/group.component.css")]
         }),
-        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormsModule"], _mongo_service__WEBPACK_IMPORTED_MODULE_3__["MongoService"], _file_system_service__WEBPACK_IMPORTED_MODULE_4__["FileSystemService"]])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormsModule"], _mongo_service__WEBPACK_IMPORTED_MODULE_3__["MongoService"], _file_system_service__WEBPACK_IMPORTED_MODULE_4__["FileSystemService"], _imgupload_service__WEBPACK_IMPORTED_MODULE_5__["ImguploadService"]])
     ], GroupComponent);
     return GroupComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/imgupload.service.ts":
+/*!**************************************!*\
+  !*** ./src/app/imgupload.service.ts ***!
+  \**************************************/
+/*! exports provided: ImguploadService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ImguploadService", function() { return ImguploadService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ImguploadService = /** @class */ (function () {
+    function ImguploadService(http) {
+        this.http = http;
+    }
+    ImguploadService.prototype.imgupload = function (fd) {
+        return this.http.post('/api/upload', fd);
+    };
+    ImguploadService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], ImguploadService);
+    return ImguploadService;
 }());
 
 
@@ -1245,10 +1388,10 @@ var SocketService = /** @class */ (function () {
     SocketService.prototype.sendMessage = function (message) {
         this.socket.emit('add-message', message);
     };
-    SocketService.prototype.getMessages = function () {
+    SocketService.prototype.getMessages = function (channelinfo) {
         var _this = this;
         var obmessages = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
-            _this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__();
+            _this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__["connect"]('', { query: 'channel=' + JSON.stringify(channelinfo) });
             //listen for messages event
             _this.socket.on('message', function (data) { observer.next(data); });
             //when the observer ends then disconnect

@@ -3,6 +3,7 @@ import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {MongoService} from '../mongo.service'
 import {FileSystemService} from '../file-system.service'
+import {ImguploadService} from '../imgupload.service'
 
 @Component({
   selector: 'app-group',
@@ -51,8 +52,10 @@ export class GroupComponent implements OnInit {
   edituserroles:any
   edituserrole:any
   user_name_list:any
+  user_selectedfile = null
+  userimgpath=''
 
-  constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService) { }
+  constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService, private iup:ImguploadService) { }
 
   ngOnInit(){
     //does these on page load.
@@ -79,61 +82,122 @@ export class GroupComponent implements OnInit {
     this.router.navigateByUrl('/login')
   }
   //sets the channel clicked on and sends you to the channel page
-  openChannel(channel,group){
+  openChannel(channel,channelid,groupid){
     localStorage.setItem("channel_name",channel)
-    localStorage.setItem("group_name", group)
+    localStorage.setItem("channel_id",channelid)
+    localStorage.setItem("group_id", groupid)
     this.router.navigateByUrl('/channel')
   }
+
+  onFileSelected(event){
+    console.log(event);
+    this.user_selectedfile = event.target.files[0];
+  }
   //add a user by sending object to fileservice that will send that data to server. checks if name and email is blank.
-  addUser(event){
-    event.preventDefault();
-    this.ureset()
-    console.log("adding user")
-    if(this.username == "" || this.username == null){
-      if(this.useremail == "" || this.useremail == null){
+  addUser(){
+    if (this.user_selectedfile == null){
+      this.ureset()
+      console.log("adding user")
+      if(this.username == "" || this.username == null){
+        if(this.useremail == "" || this.useremail == null){
+          this.uemailfalse = true
+        }
+        this.unamefalse = true
+      }else if(this.useremail == "" || this.useremail == null){
         this.uemailfalse = true
+      }else{
+        if (this.userrole == "Super_User"){
+          this.userroles = ["User","Group_User",this.userrole]
+          this.userOBJ = {name:this.username, password:this.userpassword,image:'',email:this.useremail,roles:this.userroles}
+          this.mongo.add_user(this.userOBJ).subscribe(users =>{
+            if (users.success == false){
+              alert("user already exists")
+            }else{
+              this.getUsers()
+              this.clearUserData()
+            }
+          })
+        }
+        else if(this.userrole == "Group_User"){
+          this.userroles = ["User",this.userrole]
+          this.userOBJ = {name:this.username, password:this.userpassword,image:'',email:this.useremail,roles:this.userroles}
+          this.mongo.add_user(this.userOBJ).subscribe(users =>{
+            if (users.success == false){
+              alert("user already exists")
+            }else{
+              this.getUsers()
+              this.clearUserData()
+            }
+          })
+        }
+        else{
+          this.userOBJ = {name:this.username, password:this.userpassword,image:'',email:this.useremail,roles:[this.userrole]}
+          this.mongo.add_user(this.userOBJ).subscribe(users =>{
+            if (users.success == false){
+              alert("user already exists")
+            }else{
+              this.getUsers()
+              this.clearUserData()
+            }
+          })
+        }
       }
-      this.unamefalse = true
-    }else if(this.useremail == "" || this.useremail == null){
-      this.uemailfalse = true
     }else{
-      if (this.userrole == "Super_User"){
-        this.userroles = ["User","Group_User",this.userrole]
-        this.userOBJ = {name:this.username, password:this.userpassword,email:this.useremail,roles:this.userroles}
-        this.mongo.add_user(this.userOBJ).subscribe(users =>{
-          if (users.success == false){
-            alert("user already exists")
-          }else{
-            this.getUsers()
-            this.clearUserData()
+      const fd = new FormData();
+      fd.append('image',this.user_selectedfile,this.user_selectedfile.name)
+      this.iup.imgupload(fd).subscribe(res=>{
+        this.userimgpath = res.data.filename
+        console.log(res.data.filename+','+res.data.size)
+        this.ureset()
+        console.log("adding user")
+        if(this.username == "" || this.username == null){
+          if(this.useremail == "" || this.useremail == null){
+            this.uemailfalse = true
           }
-        })
-      }
-      else if(this.userrole == "Group_User"){
-        this.userroles = ["User",this.userrole]
-        this.userOBJ = {name:this.username, password:this.userpassword,email:this.useremail,roles:this.userroles}
-        this.mongo.add_user(this.userOBJ).subscribe(users =>{
-          if (users.success == false){
-            alert("user already exists")
-          }else{
-            this.getUsers()
-            this.clearUserData()
+          this.unamefalse = true
+        }else if(this.useremail == "" || this.useremail == null){
+            this.uemailfalse = true
+        }else{
+          if (this.userrole == "Super_User"){
+            this.userroles = ["User","Group_User",this.userrole]
+            this.userOBJ = {name:this.username, password:this.userpassword,image:'images/'+this.userimgpath,email:this.useremail,roles:this.userroles}
+            this.mongo.add_user(this.userOBJ).subscribe(users =>{
+              if (users.success == false){
+                alert("user already exists")
+              }else{
+                this.getUsers()
+                this.clearUserData()
+              }
+            })
           }
-        })
-      }
-      else{
-        this.userOBJ = {name:this.username, password:this.userpassword,email:this.useremail,roles:[this.userrole]}
-        this.mongo.add_user(this.userOBJ).subscribe(users =>{
-          if (users.success == false){
-            alert("user already exists")
-          }else{
-            this.getUsers()
-            this.clearUserData()
+          else if(this.userrole == "Group_User"){
+            this.userroles = ["User",this.userrole]
+            this.userOBJ = {name:this.username, password:this.userpassword,image:'images/'+this.userimgpath,email:this.useremail,roles:this.userroles}
+            this.mongo.add_user(this.userOBJ).subscribe(users =>{
+              if (users.success == false){
+                alert("user already exists")
+              }else{
+                this.getUsers()
+                this.clearUserData()
+              }
+            })
           }
-        })
-      }
+          else{
+            this.userOBJ = {name:this.username, password:this.userpassword,image:'images/'+this.userimgpath,email:this.useremail,roles:[this.userrole]}
+            this.mongo.add_user(this.userOBJ).subscribe(users =>{
+              if (users.success == false){
+                alert("user already exists")
+              }else{
+                this.getUsers()
+                this.clearUserData()
+              }
+            })
+          }
+        }
+      })
     }
   }
+
   //add a group, checks if the name is blank then sends request to server.
   addGroup(event){
     event.preventDefault();
@@ -158,6 +222,7 @@ export class GroupComponent implements OnInit {
       console.log("getting users")
       console.log(users.users)
       this.user_list = users.users
+      console.log(this.user_list)
       this.user_name_list = []
       for(var i = 0; i < users.users.length;i++){
         console.log("users are: "+users.users[i].name)

@@ -6,11 +6,17 @@
         <h2>Channel: {{channel_name}}</h2>
       </div>
       <div class="card-body" id="cardbody">
-        <div class="row">
+        <div class="row" id="messagescroll">
           <div class="col-sm-12">
-            <div *ngFor="let message of message_list">
-              <span><p>{{message.name}} : </p></span>
-              <span><p>{{message.message}}</p></span>
+            <div class="row" *ngFor="let message of message_list">
+              <div class="col-sm-1 text-center">
+                <span class="col.sm-12"><img id="userimg" src={{message.userimage}} onerror="this.src='images/defualt.png'"></span>
+                <span id="username" class="col-sm-12"><p>{{message.name}} </p></span>
+              </div>
+              <div class="col-sm-11">
+                <span *ngIf='message.image' class="col-sm-12"><p>{{message.message}}</p></span>
+                <span *ngIf='!message.image'class="col-sm-12"><p>{{message.message}}</p></span>
+              </div>
             </div>
           </div>
         </div>
@@ -45,7 +51,7 @@
               <span class="col-sm-12">
                   <h5>{{users.name}}</h5>
               </span>
-              <button *ngIf="issuperadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user_channel(users.name)" data-toggle="tooltip" data-placement="top" title="Delete Users"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
+              <button *ngIf="issuperadmin" id="userdeleteBtn" class="btn btn-primary btn-danger" (click)="delete_user_channel(users._id,users.name)" data-toggle="tooltip" data-placement="top" title="Delete Users"><img id="userdeleteImg" src="../assets/x-icon.png"></button>
             </div>
           </div>
         </div>
