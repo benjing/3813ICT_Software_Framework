@@ -20,14 +20,17 @@ Users:
 
 | name | Type |
 | --- | --- |
+|id|Unique String|
 | name | String, required |
 | email | String |
+|password|String|
 | roles | Array of strings |
 
 Groups:
 
 | Name | Type |
 | --- | --- |
+|id|Unique String|
 | group\_name | String, required |
 | users | Array of strings |
 
@@ -35,10 +38,11 @@ Channels:
 
 | Name | Type |
 | --- | --- |
+|id|Unique String|
 | channel\_name | String |
 | group\_ID | String |
 | users | Array of strings |
-| messages | Array of objects that consist of {name: string,message:string} |
+| messages | Array of objects that consist of {name: String, userimage: String, message: String, image: Boolean} |
 
 # Client and Server Relationship
 
