@@ -22,8 +22,9 @@ Users:
 | --- | --- |
 |id|Unique String|
 | name | String, required |
-| email | String |
 |password|String|
+|image|String(image path)|
+| email | String |
 | roles | Array of strings |
 
 Groups:
@@ -48,7 +49,7 @@ Channels:
 
 The client is an angular app that has socket.io installed and the client sends requests to the server that either retrieve update or delete data then the client shows the data to the user.
 
-The server is a node server that has the express and socket.io install on it. This server gets requests from the client and then interacts with a file to retrieve, update or delete data then sends the result back to the client.
+The server is a node server that has the express and socket.io install on it. This server gets requests from the client and then interacts with a file to retrieve, update or delete data then sends the result back to the client. server also gets requests to save an image onto the server. It also gets the join message from the client and then waits for a message sent to it by the client.
 
 
 
@@ -60,22 +61,22 @@ Filesystem API
 
 | Route | Parameters | Method | Return Values | Purpose |
 | --- | --- | --- | --- | --- |
-| /api/auth | username:string | Post | userObj:objectsuccess:Boolean | To check if a user exists |
+| /api/auth | username:string password:string | Post | userObj:object success:Boolean | To check if a user exists |
 | /api/users |   | Get | userObj:objectsuccess:Boolean | To get all users |
-| /api/users | userObj:object | Post | userObj:objectsuccess:boolean | To add a user |
-| /api/users |   | Put | userObj:objectsuccess:boolean | To edit a users role |
-| /api/users/:name | name:string | Delete | userObj:objectsuccess:boolean | To delete a user |
-| /api/groups |   | Get | groupObj:objectsuccess:boolean | To get all groups |
-| /api/groups | groupObj:object | Post | groupObj:objectsuccess:boolean | To add a group |
-| /api/groups | groupuser:string,  groupname:string | Put | groupObj:objectsuccess:boolean | To add a user to a group |
-| /api/groups/:name | Name:string | Delete | groupObj:objectsuccess:boolean | To delete a group |
+| /api/users | userObj:object | Post | userObj:object success:boolean | To add a user |
+| /api/users | userObj:object  | Put | userObj:objectsuccess:boolean | To edit a users role |
+| /api/users/:id | id:string | Delete | userObj:object success:boolean | To delete a user |
+| /api/groups |   | Get | groupObj:object success:boolean | To get all groups |
+| /api/groups | groupObj:object | Post | groupObj:object success:boolean | To add a group |
+| /api/groups | groupuser:string,  groupid:string | Put | groupObj:objectsuccess:boolean | To add a user to a group |
+| /api/groups/:group/:name | group:string name:string | Delete | groupObj:objectsuccess:boolean | To delete a group |
 | /api/channels |   | Get | channelObj:objectsuccess:boolean | To get all channels |
-| /api/channels | channel:object | Post | channelObj:objectsuccess:boolean | Add a channel |
-| /api/channels | channeluser:string, channelname:string | Put | channelObj:objectsuccess:boolean | Add a user to a channel |
-| /api/channels/:name | Name:string | Delete | channelObj:objectsuccess:boolean | To delete a channel |
+| /api/channels | channel:object | Post | channelObj:object success:boolean | Add a channel |
+| /api/channels | channeluser:string, channelid:string | Put | channelObj:object success:boolean | Add a user to a channel |
+| /api/channels/:id | id:string | Delete | channelObj:object success:boolean | To delete a channel |
 | /api/channels/:channel/:name | channel:string,Name:string | Delete | channelObj:objectsuccess:boolean | To delete a user from channel |
 | /api/groups/:group/:name | group:string, name:string | Delete | channelObj:objectsuccess:boolean | To delete a user from channel |
-
+| /api/upload | username:string password:string | Post | result:string data:{'filename':string,'size':integer} numberofimages: integer message: string | to save an image onto the server and then give back the file name as a string. |
 
 
 
@@ -102,6 +103,7 @@ Services
 | --- | --- |
 | Mongo | Was to call the request to the server to get or save data to a mongo DB (wasn&#39;t implemented) |
 | filesystem | To call the request to the server to get or save data to a file. |
+| socket | To make chat rooms and send and recieve messages |
 
 Components
 
