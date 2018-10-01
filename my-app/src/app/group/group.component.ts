@@ -51,9 +51,11 @@ export class GroupComponent implements OnInit {
   edituserpassword:any
   edituserroles:any
   edituserrole:any
+  edituserimage:any
   user_name_list:any
   user_selectedfile = null
   userimgpath=''
+  user:any
 
   constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService, private iup:ImguploadService) { }
 
@@ -61,31 +63,32 @@ export class GroupComponent implements OnInit {
     //does these on page load.
     this.getGroups()
     this.getUsers()
+    this.user = sessionStorage.getItem("username")
     //checks if the logged in user is either a group user or super user
-    if(localStorage.getItem("roles").includes("Group_User")){
+    if(sessionStorage.getItem("roles").includes("Group_User")){
       this.isgroupadmin = true
     }else{
       this.isgroupadmin = false
     }
-    if(localStorage.getItem("roles").includes("Super_User")){
+    if(sessionStorage.getItem("roles").includes("Super_User")){
       this.issuperadmin = true
     }else{
       this.issuperadmin = false
     }
   }
 
-  //logs out the users and deletes the username and roles from the localstorage
+  //logs out the users and deletes the username and roles from the sessionStorage
   logoutUser(event){
     event.preventDefault();
-    localStorage.removeItem("username");
-    localStorage.removeItem("roles");
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("roles");
     this.router.navigateByUrl('/login')
   }
   //sets the channel clicked on and sends you to the channel page
   openChannel(channel,channelid,groupid){
-    localStorage.setItem("channel_name",channel)
-    localStorage.setItem("channel_id",channelid)
-    localStorage.setItem("group_id", groupid)
+    sessionStorage.setItem("channel_name",channel)
+    sessionStorage.setItem("channel_id",channelid)
+    sessionStorage.setItem("group_id", groupid)
     this.router.navigateByUrl('/channel')
   }
 
@@ -115,6 +118,7 @@ export class GroupComponent implements OnInit {
             }else{
               this.getUsers()
               this.clearUserData()
+              this.user_selectedfile = null
             }
           })
         }
@@ -127,6 +131,7 @@ export class GroupComponent implements OnInit {
             }else{
               this.getUsers()
               this.clearUserData()
+              this.user_selectedfile = null
             }
           })
         }
@@ -138,13 +143,14 @@ export class GroupComponent implements OnInit {
             }else{
               this.getUsers()
               this.clearUserData()
+              this.user_selectedfile = null
             }
           })
         }
       }
     }else{
       const fd = new FormData();
-      fd.append('image',this.user_selectedfile,this.user_selectedfile.name)
+      fd.append('image',this.user_selectedfile,this.username+this.user_selectedfile.name)
       this.iup.imgupload(fd).subscribe(res=>{
         this.userimgpath = res.data.filename
         console.log(res.data.filename+','+res.data.size)
@@ -167,6 +173,7 @@ export class GroupComponent implements OnInit {
               }else{
                 this.getUsers()
                 this.clearUserData()
+                this.user_selectedfile = null
               }
             })
           }
@@ -179,6 +186,7 @@ export class GroupComponent implements OnInit {
               }else{
                 this.getUsers()
                 this.clearUserData()
+                this.user_selectedfile = null
               }
             })
           }
@@ -190,6 +198,7 @@ export class GroupComponent implements OnInit {
               }else{
                 this.getUsers()
                 this.clearUserData()
+                this.user_selectedfile = null
               }
             })
           }
@@ -205,7 +214,7 @@ export class GroupComponent implements OnInit {
     if(this.groupname == "" || this.groupname == null){
       this.gnamefalse = true
     }else{
-      var groupObj = {group_name:this.groupname,users:[localStorage.getItem("username")]}
+      var groupObj = {group_name:this.groupname,users:[sessionStorage.getItem("username")]}
       this.mongo.add_group(groupObj).subscribe(groups =>{
         if (groups.success == false){
           alert("group already exists")
@@ -250,7 +259,7 @@ export class GroupComponent implements OnInit {
     var arr = []
     for (var i = 0; i < groups.groups.length; i++){
       var groupusers = groups.groups[i].users
-      if(groupusers.includes(localStorage.getItem("username")) || localStorage.getItem("roles").includes('super_admin')){
+      if(groupusers.includes(sessionStorage.getItem("username")) || sessionStorage.getItem("roles").includes('super_admin')){
         var obj = {
             id: groups.groups[i]._id,
             name: groups.groups[i].group_name,
@@ -260,7 +269,7 @@ export class GroupComponent implements OnInit {
         for (var j = 0; j < channels.channels.length; j++){
           if(groups.groups[i]._id == channels.channels[j].group_id){
             var lst = channels.channels[j].users
-            if(lst.includes(localStorage.getItem("username")) || localStorage.getItem("roles").includes('Super_User') || localStorage.getItem("roles").includes('Group_User')){
+            if(lst.includes(sessionStorage.getItem("username")) || sessionStorage.getItem("roles").includes('Super_User') || sessionStorage.getItem("roles").includes('Group_User')){
               obj.channels.push({
                 id: channels.channels[j]._id,
                 name: channels.channels[j].channel_name,
@@ -332,7 +341,7 @@ export class GroupComponent implements OnInit {
     if(this.channelname == "" || this.channelname == null){
       this.cnamefalse = true
     }else{
-      var channelObj = {channel_name:this.channelname,group_id:this.group_id,users:[localStorage.getItem("username")]}
+      var channelObj = {channel_name:this.channelname,group_id:this.group_id,users:[sessionStorage.getItem("username")]}
       this.fs.add_channel(channelObj).subscribe(channels =>{
         console.log(channels)
         if (channels.success == false){
@@ -451,10 +460,11 @@ export class GroupComponent implements OnInit {
     this.edituseremail = user.email
     this.edituserpassword = user.password
     this.edituserrole = user.roles[user.roles.length - 1]
+    this.edituserimage = user.image
   }
   //this sends a request to the server to update a user info
-  editUser(event){
-    event.preventDefault();
+  editUser(){
+    console.log("hello")
     this.eureset()
     console.log("adding user")
     if(this.editusername == "" || this.editusername == null){
@@ -465,38 +475,90 @@ export class GroupComponent implements OnInit {
     }else if(this.edituseremail == "" || this.edituseremail == null){
       this.euemailfalse = true
     }else{
-      if (this.edituserrole == "Super_User"){
-        this.edituserroles = ["User","Group_User",this.edituserrole]
-        this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword, email:this.edituseremail, roles:this.edituserroles}
-        this.mongo.edit_user(this.userOBJ).subscribe(users =>{
-          if (users.success == false){
-            alert("user already exists")
-          }else{
-            this.getUsers()
-            this.clearUserData()
+      if(this.user_selectedfile == null){
+        if (this.edituserrole == "Super_User"){
+          this.edituserroles = ["User","Group_User",this.edituserrole]
+          this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword,image:this.edituserimage, email:this.edituseremail, roles:this.edituserroles}
+          this.mongo.edit_user(this.userOBJ).subscribe(users =>{
+            if (users.success == false){
+              alert("user already exists")
+            }else{
+              this.getUsers()
+              this.clearUserData()
+              this.user_selectedfile == null
+            }
+          })
+        }
+        else if(this.edituserrole == "Group_User"){
+          this.edituserroles = ["User",this.edituserrole]
+          this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword,image:this.edituserimage, email:this.edituseremail, roles:this.edituserroles}
+          this.mongo.edit_user(this.userOBJ).subscribe(users =>{
+            if (users.success == false){
+              alert("user already exists")
+            }else{
+              this.getUsers()
+              this.clearUserData()
+              this.user_selectedfile = null
+            }
+          })
+        }
+        else{
+          this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword,image:this.edituserimage, email:this.edituseremail, roles:[this.edituserrole]}
+          this.mongo.edit_user(this.userOBJ).subscribe(users =>{
+            if (users.success == false){
+              alert("user already exists")
+            }else{
+              this.getUsers()
+              this.clearUserData()
+              this.user_selectedfile == null
+            }
+          })
+        }
+      }else{
+        const fd = new FormData();
+        fd.append('image',this.user_selectedfile,this.editusername+this.user_selectedfile.name)
+        this.iup.imgupload(fd).subscribe(res=>{
+          this.userimgpath = res.data.filename
+          console.log(res.data.filename+','+res.data.size)
+          this.ureset()
+          console.log("adding user")
+          if (this.edituserrole == "Super_User"){
+            this.edituserroles = ["User","Group_User",this.edituserrole]
+            this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword,image:'images/'+this.userimgpath, email:this.edituseremail, roles:this.edituserroles}
+            this.mongo.edit_user(this.userOBJ).subscribe(users =>{
+              if (users.success == false){
+                alert("user already exists")
+              }else{
+                this.getUsers()
+                this.clearUserData()
+                this.user_selectedfile = null
+              }
+            })
           }
-        })
-      }
-      else if(this.edituserrole == "Group_User"){
-        this.edituserroles = ["User",this.edituserrole]
-        this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword, email:this.edituseremail, roles:this.edituserroles}
-        this.mongo.edit_user(this.userOBJ).subscribe(users =>{
-          if (users.success == false){
-            alert("user already exists")
-          }else{
-            this.getUsers()
-            this.clearUserData()
+          else if(this.edituserrole == "Group_User"){
+            this.edituserroles = ["User",this.edituserrole]
+            this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword,image:'images/'+this.userimgpath, email:this.edituseremail, roles:this.edituserroles}
+            this.mongo.edit_user(this.userOBJ).subscribe(users =>{
+              if (users.success == false){
+                alert("user already exists")
+              }else{
+                this.getUsers()
+                this.clearUserData()
+                this.user_selectedfile = null
+              }
+            })
           }
-        })
-      }
-      else{
-        this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword, email:this.edituseremail, roles:[this.edituserrole]}
-        this.mongo.edit_user(this.userOBJ).subscribe(users =>{
-          if (users.success == false){
-            alert("user already exists")
-          }else{
-            this.getUsers()
-            this.clearUserData()
+          else{
+            this.userOBJ = {id:this.userid, name:this.editusername, password:this.edituserpassword,image:'images/'+this.userimgpath, email:this.edituseremail, roles:[this.edituserrole]}
+            this.mongo.edit_user(this.userOBJ).subscribe(users =>{
+              if (users.success == false){
+                alert("user already exists")
+              }else{
+                this.getUsers()
+                this.clearUserData()
+                this.user_selectedfile = null
+              }
+            })
           }
         })
       }

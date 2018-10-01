@@ -144,3 +144,27 @@ body{
     padding-left: 0px;
     padding-right: 0px;
 }
+
+#messageimg{
+    max-height:400px;
+    max-width:400px;
+}
+
+#messageuploadfile{
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-bottom: 35px;
+    margin-bottom: 0px;
+    padding-top: 2px;
+    display: inline;
+    width:60%;
+}
+
+#message{
+    margin-right: 10px;
+    margin-left: 10px;
+    padding-bottom: 5px;
+    padding-top: 0px;
+    display: inline;
+    width: 60%;
+}

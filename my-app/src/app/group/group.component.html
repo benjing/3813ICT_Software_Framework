@@ -71,6 +71,9 @@
               <span *ngIf="isgroupadmin" data-toggle="modal" data-target="#edit_user">
                 <button id="usereditBtn" class="btn btn-primary btn-secondary" (click)="edit_user(users)" data-toggle="tooltip" data-placement="top" title="Edit Users"><img id="userdeleteImg" src="../assets/icon-edit.png"></button>
               </span>
+              <span *ngIf="users.name==user" data-toggle="modal" data-target="#edit_user">
+                  <button id="usereditBtn" class="btn btn-primary btn-secondary" (click)="edit_user(users)" data-toggle="tooltip" data-placement="top" title="Edit Users"><img id="userdeleteImg" src="../assets/icon-edit.png"></button>
+                </span>
             </div>
           </div>
         </div>
@@ -126,7 +129,7 @@
 <div class="modal fade" id="edit_user" tabindex="-1" role="dialog" aria-labelledby="edit_userTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <form (submit)="editUser($event)">
+      <form>
         <div class="modal-header" id="cardhead">
           <h5 class="modal-title" id="edit_userTitle">Add User</h5>
         </div>
@@ -134,19 +137,23 @@
                 <div class="row">
                   <div class= "col-sm-6">
                     Username:<br>
-                    <input type="text" [(ngModel)]='editusername' name="username"><br>
+                    <input type="text"  class="form-control" [(ngModel)]='editusername' name="username">
                     Email:<br>
-                    <input type="email" [(ngModel)]='edituseremail' name="email"><br>
+                    <input type="email" class="form-control" [(ngModel)]='edituseremail' name="email">
                   </div>
                   <div class= "col-sm-6">
                     Password:<br>
-                    <input type="password" [(ngModel)]='edituserpassword' name="password"><br>
+                    <input type="password" class="form-control" [(ngModel)]='edituserpassword' name="password">
                     Roles:<br>
-                    <select name="roles" [(ngModel)]='edituserrole'>
+                    <select name="roles" class="form-control" [(ngModel)]='edituserrole'>
                       <option value="User">User</option>
-                      <option value="Group_User">Group_User</option>
+                      <option *ngIf="isgroupadmin" value="Group_User">Group_User</option>
                       <option *ngIf="issuperadmin" value="Super_User">Super_User</option>
-                    </select><br>
+                    </select>
+                  </div>
+                  <div class="col-sm-12">
+                    User Profile Image:<br>
+                    <input type="file" class="form-control" (change)="onFileSelected($event)" name="edituploadfile" id="edituploadfile">
                   </div>
                 </div>
                 <div *ngIf="eunamefalse" id="errormessage"><h4>Invalid input! Please enter a user name</h4></div>
@@ -154,7 +161,7 @@
         </div>
         <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="eureset()">Cancel</button>
-              <button type="submit" class="btn btn-success btn-primary">Add User</button>
+              <button type="button" class="btn btn-success btn-primary" (click)="editUser()">Add User</button>
         </div>
       </form>
     </div>

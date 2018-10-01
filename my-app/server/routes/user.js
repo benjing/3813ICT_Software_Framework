@@ -7,9 +7,11 @@ module.exports = function(app,db,fs){
         const assert = require('assert')
 
         const collection = db.collection("tests");
+        //gets all users in the database
         collection.find({}).toArray(function(err, users) {
             assert.equal(err, null);
             console.log("Found the following users: "+users);
+            //sends all the users data back
             res.send({users})
         });
     });
@@ -19,19 +21,22 @@ module.exports = function(app,db,fs){
         console.log(req.body.userOBJ)
         const collection = db.collection("tests");
         const assert = require('assert')
-        // Insert some documents
+        // sees if there is a user with the given name
         collection.find({name:req.body.userOBJ.name}).toArray(function(err, users) {
             assert.equal(err, null);
             console.log("Found the following records: "+ users);
             if (users == ""||users == null){
                 console.log("hello")
+                // inserts the user info
                 collection.insertOne(
                     {name : req.body.userOBJ.name, password:req.body.userOBJ.password,image:req.body.userOBJ.image, email:req.body.userOBJ.email, roles:[req.body.userOBJ.roles]}
-                    )
-                res.send({"success":true})
+                    , function(err,users){
+                        //sends back user id and success
+                        res.send({"users":users.ops[0]._id,"success":true})
+                    })
             }else{
-                console.log("nohello")
-                res.send({"success":false})
+                //sends success false if a user was found
+                res.send({"users":"","success":false})
             }
         });
     });
@@ -41,10 +46,11 @@ module.exports = function(app,db,fs){
 
         const assert = require('assert')
         const collection = db.collection("tests");
-        
+        //deletes the user with the given id
         collection.deleteOne({"_id": ObjectId(req.params.id) }, function(err, result) {
             assert.equal(err, null);
-            res.send({"message":result})
+            //sends success
+            res.send({"message":result,"success":true})
         });
 
     })
@@ -54,10 +60,12 @@ module.exports = function(app,db,fs){
         const assert = require('assert')
 
         const collection = db.collection("tests");
+        //changes the data of the user with the given id
         collection.updateOne({"_id": ObjectId(req.body.userObj.id) }, 
-            { $set: {name : req.body.userObj.name, password:req.body.userObj.password, email:req.body.userObj.email, roles:req.body.userObj.roles} }, function(err, result) {
+            { $set: {name : req.body.userObj.name, password:req.body.userObj.password,image:req.body.userObj.image, email:req.body.userObj.email, roles:req.body.userObj.roles} }, function(err, result) {
             assert.equal(err, null);
-            res.send({"message":result})
+            //sends success
+            res.send({"message":result,"success":true})
         });
     })
 }

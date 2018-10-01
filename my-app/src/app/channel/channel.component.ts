@@ -4,6 +4,8 @@ import {Router} from '@angular/router';
 import {MongoService} from '../mongo.service'
 import {FileSystemService} from '../file-system.service'
 import {SocketService} from '../socket.service'
+import {ImguploadService} from '../imgupload.service'
+
 
 @Component({
   selector: 'app-channel',
@@ -27,25 +29,27 @@ export class ChannelComponent implements OnInit {
   userimage:any
   message:any
   connection;
-  channel_name = localStorage.getItem("channel_name")
-  channel_id = localStorage.getItem("channel_id")
+  channel_name = sessionStorage.getItem("channel_name")
+  channel_id = sessionStorage.getItem("channel_id")
   imagepath:any = ''
+  istext = true
+  user_selectedfile = null
 
-  constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService, private socket:SocketService) { }
+  constructor(private router:Router,private form:FormsModule, private mongo:MongoService,private fs:FileSystemService, private socket:SocketService, private iup:ImguploadService) { }
 
   //this is on load
   ngOnInit() {
     this.get_channel();
     this.getUsers()
     //checks if user is logged in
-    if (!localStorage.getItem('username')){
+    if (!sessionStorage.getItem('username')){
       console.log('Not validated');
-      localStorage.clear();
+      sessionStorage.clear();
       alert("Not valid User")
       this.router.navigateByUrl('login');
     }else{
       //gets the username from local storage
-      this.username = localStorage.getItem('username');
+      this.username = sessionStorage.getItem('username');
       console.log(this.channel_id)
       // this.socket.join({user:this.username,channel:this.channel_id});
       console.log("session started for: "+this.username);
@@ -60,12 +64,12 @@ export class ChannelComponent implements OnInit {
       })
     }
     //checks if the logged in user is either a group user or super user
-    if(localStorage.getItem("roles").includes("Group_User")){
+    if(sessionStorage.getItem("roles").includes("Group_User")){
       this.isgroupadmin = true
     }else{
       this.isgroupadmin = false
     }
-    if(localStorage.getItem("roles").includes("Super_User")){
+    if(sessionStorage.getItem("roles").includes("Super_User")){
       this.issuperadmin = true
     }else{
       this.issuperadmin = false
@@ -81,7 +85,7 @@ export class ChannelComponent implements OnInit {
       console.log("getting users")
       console.log(channel)
       for (var i = 0; i < channel.channels.length; i++){
-        if (channel.channels[i].channel_name == localStorage.getItem("channel_name")){
+        if (channel.channels[i].channel_name == sessionStorage.getItem("channel_name")){
           this.make_lists(channel.channels[i])
           return
         }
@@ -106,19 +110,35 @@ export class ChannelComponent implements OnInit {
       console.log(this.message_list)
     })
   }
-
+  //send a chat message
   sendMessage(){
     console.log(this.message)
     for (var i = 0; i < this.user_list.length; i++){
       if (this.user_list[i].name == this.username){
         this.userimage = this.user_list[i].image
+        console.log(this.user_list[i])
       }
     }
-    //send a chat message
-    if (this.imagepath == "" || this.imagepath == null){
-      this.socket.sendMessage({name:this.username, userimage:this.userimage, message:this.message,image:false});
+    //checks if the user sent an image or a text message
+    if (this.user_selectedfile == null){
+      var message = {name:this.username, userimage:this.userimage, message:this.message,image:false}
+      this.mongo.addmessage(message,this.channel_id).subscribe(users=>{})
+      this.socket.sendMessage(message);
     }else{
-      this.socket.sendMessage({name:this.username, userimage:this.userimage, message:this.imagepath,image:true});
+      //checks if the file is a png or jpg file.
+      if(this.user_selectedfile.name.match(/.jpg|.png|.PNG|.JPG/)){
+        const fd = new FormData();
+        fd.append('image',this.user_selectedfile,this.user_selectedfile.name)
+        this.iup.imgupload(fd).subscribe(res=>{
+          this.imagepath = res.data.filename
+          console.log(res.data.filename+','+res.data.size)
+          var message = {name:this.username, userimage:this.userimage, message:"images/"+this.imagepath,image:true}
+          this.mongo.addmessage(message,this.channel_id).subscribe(users=>{})
+          this.socket.sendMessage(message);
+        })
+      }else{
+        console.log("no not png")
+      }
     }
   }
 
@@ -137,9 +157,9 @@ export class ChannelComponent implements OnInit {
     }else{
       if(this.user_name_list.includes(this.channelusername)){
         console.log("Adding user to "+this.channelusername+" group")
-        this.mongo.edit_channel(this.channelusername,localStorage.getItem("channel_id")).subscribe(channels=>{
+        this.mongo.edit_channel(this.channelusername,sessionStorage.getItem("channel_id")).subscribe(channels=>{
           console.log(channels)
-          this.mongo.edit_group(this.channelusername,localStorage.getItem("group_id")).subscribe(groups=>{
+          this.mongo.edit_group(this.channelusername,sessionStorage.getItem("group_id")).subscribe(groups=>{
             for(var i = 0;i<this.user_list.length;i++){
               if (this.user_list[i].name == this.channelusername){
                 this.c_user_list.push(this.user_list[i])
@@ -175,7 +195,7 @@ export class ChannelComponent implements OnInit {
 
   //this sends a request to the server to delete a user from a channel
   delete_user_channel(usersid,usersname){
-    console.log("deleteing "+usersname+" from channel "+localStorage.getItem("channel_name"))
+    console.log("deleteing "+usersname+" from channel "+sessionStorage.getItem("channel_name"))
     this.mongo.delete_channel_user(this.channel_id, usersname).subscribe(channels=>{
       console.log(channels)
       for(var i = 0;i<this.c_user_list.length;i++){
@@ -184,5 +204,16 @@ export class ChannelComponent implements OnInit {
         }
       }
     })
+  }
+
+  imgsend(){
+    this.istext = false
+  }
+  txtsend(){
+    this.istext = true
+  }
+
+  onFileSelected(event){
+    this.user_selectedfile = event.target.files[0];
   }
 }

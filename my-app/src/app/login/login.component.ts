@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
       var result = data
       //if the response from the server is true then log in.
       if(result.success == true){
-        localStorage.setItem("roles", result.users[0].roles)
-        localStorage.setItem("username", this.username);
+        sessionStorage.setItem("roles", result.users[0].roles)
+        sessionStorage.setItem("username", this.username);
         this.router.navigateByUrl('/group')
         return
       }

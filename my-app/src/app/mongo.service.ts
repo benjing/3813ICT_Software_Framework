@@ -101,4 +101,11 @@ export class MongoService {
       
     })
   }
+
+  addmessage(message:Object, id:string):Observable<any>{
+    return this.http.put('/api/channels/message',{
+      message:message,
+      id:id
+    })
+  }
 }

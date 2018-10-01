@@ -14,7 +14,7 @@
                 <span id="username" class="col-sm-12"><p>{{message.name}} </p></span>
               </div>
               <div class="col-sm-11">
-                <span *ngIf='message.image' class="col-sm-12"><p>{{message.message}}</p></span>
+                <span *ngIf='message.image' class="col-sm-12"><p><img id="messageimg" src={{message.message}}></p></span>
                 <span *ngIf='!message.image'class="col-sm-12"><p>{{message.message}}</p></span>
               </div>
             </div>
@@ -24,9 +24,17 @@
       <div class="card-footer">
         <div>
           <form>
+            <span *ngIf='istext'><button class="btn btn-primary btn-success" (click)="imgsend()">image</button></span>
+            <span *ngIf='!istext'><button class="btn btn-primary btn-success" (click)="txtsend()">text</button></span>
             Message:
-            <input [(ngModel)]='message' name="message" id="message">
-            <button class="btn btn-primary btn-success" (click)="sendMessage()">Send Message</button>
+            <span *ngIf='istext'>
+              <span><input class="form-control" [(ngModel)]='message' name="message" id="message"></span>
+              <button class="btn btn-primary btn-success" (click)="sendMessage()">Send Message</button>
+            </span>
+            <span *ngIf='!istext'> 
+              <span><input type="file" class="form-control" (change)="onFileSelected($event)" name="messageuploadfile" id="messageuploadfile"></span>
+              <button class="btn btn-primary btn-success" (click)="sendMessage()">Send Message</button>
+            </span>
           </form>
         </div>
       </div>
