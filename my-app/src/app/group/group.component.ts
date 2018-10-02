@@ -20,6 +20,7 @@ export class GroupComponent implements OnInit {
   issuperadmin = false
   unamefalse = false
   uemailfalse=false
+  upasswordfalse = false
   gnamefalse = false
   cnamefalse = false
   cunamefalse = false
@@ -28,6 +29,7 @@ export class GroupComponent implements OnInit {
   guserfalse = false
   euemailfalse = false
   eunamefalse = false
+  eupasswordfalse = false
   combined_list:any
   group_list:any
   channel_list:any
@@ -103,11 +105,19 @@ export class GroupComponent implements OnInit {
       console.log("adding user")
       if(this.username == "" || this.username == null){
         if(this.useremail == "" || this.useremail == null){
+          if(this.userpassword == ""||this.userpassword == null){
+            this.upasswordfalse = true
+          }
           this.uemailfalse = true
         }
         this.unamefalse = true
       }else if(this.useremail == "" || this.useremail == null){
+        if(this.userpassword == ""||this.userpassword == null){
+          this.upasswordfalse = true
+        }
         this.uemailfalse = true
+      }else if(this.userpassword == ""||this.userpassword == null){
+        this.upasswordfalse = true
       }else{
         if (this.userrole == "Super_User"){
           this.userroles = ["User","Group_User",this.userrole]
@@ -439,6 +449,7 @@ export class GroupComponent implements OnInit {
   ureset(){
     this.uemailfalse = false
     this.unamefalse = false
+    this.upasswordfalse = false
   }
   //this resets the error stat of the group form
   greset(){
@@ -452,6 +463,7 @@ export class GroupComponent implements OnInit {
   eureset(){
     this.euemailfalse = false
     this.eunamefalse = false
+    this.eupasswordfalse = false
   }
   //this sets the user info of the user clicked when going to edit a us
   edit_user(user){
@@ -469,11 +481,19 @@ export class GroupComponent implements OnInit {
     console.log("adding user")
     if(this.editusername == "" || this.editusername == null){
       if(this.edituseremail == "" || this.edituseremail == null){
+        if(this.edituserpassword == ""||this.edituserpassword == null){
+          this.eupasswordfalse = true
+        }
         this.euemailfalse = true
       }
       this.eunamefalse = true
     }else if(this.edituseremail == "" || this.edituseremail == null){
+      if(this.edituserpassword == ""||this.edituserpassword == null){
+        this.eupasswordfalse = true
+      }
       this.euemailfalse = true
+    }else if(this.edituserpassword == ""||this.edituserpassword == null){
+      this.eupasswordfalse = true
     }else{
       if(this.user_selectedfile == null){
         if (this.edituserrole == "Super_User"){

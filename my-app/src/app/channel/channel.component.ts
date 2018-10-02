@@ -121,9 +121,13 @@ export class ChannelComponent implements OnInit {
     }
     //checks if the user sent an image or a text message
     if (this.user_selectedfile == null){
-      var message = {name:this.username, userimage:this.userimage, message:this.message,image:false}
-      this.mongo.addmessage(message,this.channel_id).subscribe(users=>{})
-      this.socket.sendMessage(message);
+      if (this.message == ""||this.message == null){
+        alert("no message")
+      }else{
+        var message = {name:this.username, userimage:this.userimage, message:this.message,image:false}
+        this.mongo.addmessage(message,this.channel_id).subscribe(users=>{})
+        this.socket.sendMessage(message);
+      }
     }else{
       //checks if the file is a png or jpg file.
       if(this.user_selectedfile.name.match(/.jpg|.png|.PNG|.JPG/)){
@@ -137,7 +141,7 @@ export class ChannelComponent implements OnInit {
           this.socket.sendMessage(message);
         })
       }else{
-        console.log("no not png")
+        alert("Not an exceptable file format.")
       }
     }
   }
