@@ -8,6 +8,11 @@ Installing/Running
 3. install express, mongo ,mongoose and socket.io
 3. run node server.js
 
+Running the test
+1. go the server folder
+2. run node server.js
+3. run command npm test
+
 # Git Layout
 
 The way my git repository is laid out is having a main folder that has all my projects in it. This is set out like this because it would allow me to then have all my projects in the one folder, so I don&#39;t have to keep many repository&#39;s. During the project when I started to implement the filesystem(or before I knew I had to use file system and was going to use mongo) I branched off the repository so that I could make sure that the filesystem worked perfectly before merging the branch and the origin. Or so that I could leave the branch and start over from before I implemented the filesystem.
@@ -104,6 +109,7 @@ Services
 | Mongo | Was to call the request to the server to get or save data to a mongo DB (wasn&#39;t implemented) |
 | filesystem | To call the request to the server to get or save data to a file. |
 | socket | To make chat rooms and send and recieve messages |
+| imgupload | To save a file to the server |
 
 Components
 
